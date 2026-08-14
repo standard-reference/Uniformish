@@ -42,6 +42,11 @@ doesn't exist. `ascolour-tonal-match.mjs` already does exactly this snap.
 
 ## 2. Blocking: the palette reverted to Comfort Colors, which Apliiq cannot build
 
+> **Resolved to a candidate, pending one check.** See "The split" below — a
+> Comfort Colors / Independent Trading Co split keeps the palette *and* the woven
+> label. What it hinges on is not yet verifiable from this environment.
+
+
 The six colours (Jet/Bone/Moss/Clay/Slate/Umber) are the **historical** palette from
 `CLAUDE.md`'s superseded table, sourced as Comfort Colors Pepper/Ivory/Moss/
 Terracotta/Denim/Sandstone.
@@ -127,3 +132,72 @@ Multi-Step section's finding that Bone works downward only. A −0.15L Bone woul
   exempt, and POD *may* qualify — but a stock blank with a brand label attached is
   not obviously personalised. Worth a real legal check before publishing
   "no return path exists by construction" to any market outside the US.
+
+---
+
+# The split — measured, and the one thing still blocking it
+
+The brand call was: *split if the cuts can be matched or coordinated; otherwise keep
+the colour names and move to AS Colour.* Here is what the catalog actually says.
+
+## The split is forced, not optional
+
+**Apliiq's entire Comfort Colors range is 13 products, and every one is a top** ✅ —
+tees, hoodies, crews, long-sleeves, a tank. There are **no Comfort Colors bottoms on
+Apliiq at all**. So the six-colour core four cannot be built single-house on Comfort
+Colors under any arrangement. Either the palette splits across houses, or it leaves
+Comfort Colors.
+
+## The candidate: Comfort Colors tops + Independent Trading Co pigment-dyed bottoms
+
+Apliiq carries **Independent Trading Co PRM50PTPD Pigment Dyed Fleece Joggers** and
+**PRM50STPD Pigment Dyed Fleece Shorts** ✅ — a matched pant *and* short in one
+family.
+
+Why this is the right shape for the "cuts coordinated" condition:
+
+- **Same dye process.** Comfort Colors is garment-dyed; ITC's PD line is pigment-dyed.
+  Both produce the washed, slightly uneven hand that garment dyeing gives, so the two
+  coordinate on *finish and character*, not merely on a hex value. A garment-dyed top
+  over a piece-dyed bottom is the mismatch that reads wrong on a body; this avoids it.
+- **Everything stays on Apliiq**, so the woven label — which the system flow doc
+  correctly identifies as the moat — survives intact. This is the split that costs
+  nothing structurally.
+- **A matched pant/short pair in one family is a structural advantage over AS
+  Colour**, where no shorts style carries more than three colours and each colour
+  implies a different silhouette (Cypress only in a walk short, Shadow only in an
+  active short). ITC offers one silhouette family across both bottoms.
+
+## What still blocks it
+
+**Whether Comfort Colors tops and ITC pigment-dyed bottoms actually share
+colourways.** ❓ This is the whole question and it is not answerable from here:
+
+- `independenttradingco.com` returns 429 to automated requests.
+- `alphabroder.com` and `ssactivewear.com` return 403 without a browser fingerprint.
+- `comfortcolors.com` is a client-rendered SPA; colours are not in the HTML.
+- Chromium cannot traverse this environment's agent proxy, so rendering is unavailable.
+
+**`get_product` against Apliiq answers it directly** — both houses are in Apliiq's
+catalog, so one authenticated call per style resolves it. That makes API credentials
+(issue #1, handoff blocker #3) the gate on the palette decision, not just on the
+smoke test.
+
+## Fallback, if the overlap turns out thin
+
+Keep **Jet / Bone / Moss / Clay / Slate / Umber as brand language** and re-point them
+at AS Colour hexes. The colour names are brand IP and do not have to map to a
+supplier's dye names — AS Colour already ships a "Bone" (`#D1CDCA`) against Comfort
+Colors Ivory (`#E7CEB5`). The vocabulary survives a change of house; only the hexes
+move.
+
+## What to check the moment credentials land
+
+1. `get_product` on Comfort Colors 1717 (Apliiq "Comfort Colors Heavyweight T-Shirt")
+   — full colour list with hexes.
+2. `get_product` on ITC PRM50PTPD and PRM50STPD — same.
+3. Run both through `ascolour-tonal-match.mjs` (the `CAT` map takes any house) to get
+   SOLID and STEP counts for the split.
+4. Compare against AS Colour's 5 solid / 14 stepped. **If the split does not beat
+   that, take the fallback** — a coordinated dye process is not worth a materially
+   smaller matrix.

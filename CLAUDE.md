@@ -31,6 +31,14 @@ Worth knowing when weighing "solid" against "step": exact hex matching across *d
 
 Full working and the matching script in `pod-suppliers.md` and `research/`.
 
+#### A STEP must be sourced, not computed
+
+**You cannot order a computed hex.** Apliiq ships stock dye lots; a specified hex is only achievable through sublimation, which is why the patterns, socks and Slip-On sit with Printful.
+
+So the workflow is: compute the target (anchor + ΔL 0.15, hue and chroma held), then **snap it to the nearest real colourway in the supplier's range**, then re-check the snapped result against the match spec. If nothing in range lands outside the forbidden band, **that STEP does not exist** and the colour ships SOLID-only. `research/ascolour-tonal-match.mjs` does exactly this snap.
+
+Getting this backwards is the easiest mistake to make here, because the maths is clean and self-consistent and looks finished. It was made once already — see `research/spec-reconciliation.md`.
+
 #### Surfacing it in the storefront
 
 The match grade is **merchandising, not a disclosure**. Both grades are sold as deliberate; neither is presented as the compromised version of the other.
@@ -91,6 +99,24 @@ Two pattern flavors, deliberately **interleaved, not firewalled** — pairing a 
 - **Production home: Printful, via sublimation, permanently** — not a stopgap. Sublimation prints across the whole surface rather than onto pre-dyed stock, so it hits exact hex values with zero MOQ. This is confirmed *better* for socks than jacquard would have been.
 - **Sock length: crew, not ankle** — more leg-panel canvas for the pattern to actually read.
 
+## How a fit gets sold — the floor
+
+From the system flow doc (`unit-system-flow.html`), and not previously recorded here.
+
+- **Minimum two pieces, same colourway, every order.** No single-item checkout. Stated as a rule — "we don't sell orphan pieces" — not implemented as an upsell.
+- **Enforcement stops at checkout.** The floor governs what ships, not what gets worn. Nothing polices the pair after the sale and nothing should; the identity lives in the object (woven label, grade, code) whether the pieces are worn together or not.
+- **Kit** — 3–4 pieces as one bundled SKU. The only path Aftercare applies to.
+- **Duo** — two pieces listed individually and grouped at cart, not a bundled SKU. Two anchors: tee + bottom, or tee + slip-on.
+- **Grade drives the path.** SOLID pairs with what someone already owns, so it's à-la-carte-friendly. STEP only reads as a decision in combination, so it's kit-first. Socks are upsell-only — they don't clear the floor alone.
+- **Returns: Kits only.** Duos are grouped from individually final-sale pieces, so there's nothing to partially unwind. A return can size a Kit down but never below the two-piece floor. Handled personally — neither Apliiq nor Printful covers buyer's-remorse returns, so it's a cost carried on purpose and priced into Kit margin.
+
+**Two open risks on this, flagged and not yet resolved:**
+
+1. The floor puts a **~$90–115 minimum on a first order** from an unknown brand. It forces the set-purchase behaviour rather than testing whether it exists. Strong strategically, high-risk commercially — a better A/B test than launch commitment.
+2. **"Final sale" on Duos needs a legal check outside the US.** UK/EU distance-selling rules give a statutory cancellation right that generally cannot be waived. Made-to-order goods are exempt and POD *may* qualify, but a stock blank with a brand label attached is not obviously personalised.
+
+Also unresolved by design rather than by data: whether the Duo cart rule (block checkout on an unmatched single piece) is supported by the storefront platform. Confirm before this goes live.
+
 ## Manufacturing & sourcing
 
 - **Garments (Tee/Crewneck/Pant/Shorts):** Apliiq, zero-MOQ, private-labeled. **The vendor is settled; the blank is not** — Comfort Colors was the original pick, but AS Colour is the leading candidate on cut/fit and full-matrix coverage. Apliiq itself stays because its sewn-in woven labels are the moat and no competitor offers them. See `pod-suppliers.md`. This is the capital-constrained launch path — chosen specifically because building the full 6-color matrix through a real low-MOQ factory would run **$20–40K+** upfront (MOQ multiplies per color, not just per style).
@@ -135,7 +161,8 @@ The system itself is the content — "one rule, one color" and the cares/doesn't
 
 - `HANDOFF.md` — **read this first in a new session.** Current state, blockers needing a human, and the suggested order of work.
 - `pod-suppliers.md` — running comparison of POD platforms and blank houses, with evidence marked confirmed / unverified. Where the manufacturing decision gets made.
-- `unit-color-system.html` — the interactive spec sheet. Canonical source for the full color rationale copy, the product grid, and the Cross pattern cards. Treat as source of truth for exact wording/values; this doc is the summary. **Missing from the repo — see issue #6.**
+- `unit-system-flow.html` — **the interactive spec sheet, now in the repo.** Traces the whole path: supply, palette and grades, patterns, items, assembly, aftercare, roadmap. Canonical source for exact wording and spec values; this doc is the summary. Supersedes the never-committed `unit-color-system.html` (issue #6).
+- `research/spec-reconciliation.md` — where the spec sheet and these notes disagreed, and why. Read before trusting either in isolation.
 - `apliiq-mcp-spec.md` — the current active build target. Auth flow, tool list, architecture, open gaps.
 - `apliiq-mcp/` — the MCP server itself, with its own README covering setup and the assumptions still needing live verification.
 
