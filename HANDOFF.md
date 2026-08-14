@@ -68,16 +68,19 @@ So the one-house thesis **holds**. Stay on Apliiq, change the blank from Comfort
 
 **Resolved by the tonal-break rule.** Shorts run one shade *lighter* in the same hue rather than hex-matching. The fit still reads as one colour, and you gain a deliberate break at the waist. AS Colour already makes this — the **Faded** line (Faded Track Shorts 5939, Faded Track Pants 5938) is washed-down siblings of the base colours.
 
-Staying inside one silhouette family (Relax Track Shorts 5933 + 5939), the matrix reaches **9 anchors, 8 with a matching pant**. The cleanest, all with pant available:
+**The rule is palette-wide, not a shorts exception** — that distinction turned out to matter more than anything else here:
 
-| Top | Short | ΔL |
-|---|---|---|
-| Athletic Heather `#A4A4A2` | Bone `#D1CDCA` | 0.13 |
-| Athletic Heather `#A4A4A2` | Faded Bone `#EAE7E2` | 0.21 |
-| Shadow `#626367` | Athletic Heather `#A4A4A2` | 0.22 |
-| Bone / Athletic Heather / Black | same colour, exact | — |
+| Regime | Complete core-four fits |
+|---|---|
+| Strict — exact hex everywhere | 5 |
+| Step on **shorts only** | **5 — no gain at all** |
+| **Step across the whole palette** | **14** (5 solid, 9 stepped) |
 
-Matched in OKLCh so "one step lighter" behaves consistently across hues. **Target ΔL 0.13–0.22** — the 0.06–0.08 pairings (Shadow/Faded Grey, Bone/Faded Bone) are subtle enough to risk reading as a laundry accident, and dye-lot variation could swamp them. Check those against physical swatches.
+Stepping shorts alone does nothing: the anchors that gain a shorts option have no pant in their colour, so the bottleneck just moves. *(An earlier version of this file said "9 anchors, 8 with a matching pant" — that counted rows, not colours. It is 4.)*
+
+Matched in OKLCh so a step means the same thing across hues. **ΔL 0.13–0.22.** **ΔL 0.06–0.10 is forbidden, not merely discouraged** — 8 otherwise-valid pairings fall in it and must stay excluded; at that distance the step reads as a laundry accident and dye-lot drift can swamp it. Direction is fixed: never darker going down.
+
+The nine stepped fits add warm neutrals (Sand, Mushroom, Light Grey, Granite) and blues (Navy, Midnight Blue, Petrol Blue) — full table in `pod-suppliers.md`.
 
 Caveats: measured from AS Colour's **US DTC site**, not Apliiq's per-product colour lists — those render client-side and need `get_product` (i.e. credentials). Two things to confirm once creds land: that Apliiq's colour lists match, and that Apliiq **carries the Faded line at all** — the 9-colour answer leans on it.
 

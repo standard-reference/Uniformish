@@ -39,3 +39,22 @@ conclusion from an intersection.
 This reads AS Colour's US direct-to-consumer site, which is not necessarily the
 wholesale blank range and not necessarily what Apliiq carries. `get_product`
 against Apliiq is what makes any of this authoritative — see issue #1.
+
+## `ascolour-regimes.mjs`
+
+Produced the regime comparison table in `pod-suppliers.md` → "Stepping shorts
+alone achieves nothing".
+
+Counts **complete core-four fits** (tee + crew + pant + short in one hue family,
+never darker going down) under five matching regimes, from strict hex matching
+through to a palette-wide tonal step. Same `as_*.html` inputs and same OKLCh
+matcher as `ascolour-tonal-match.mjs` — see above for how to regenerate them.
+
+The result that drove the decision: relaxing **shorts only** yields no
+additional complete fits at any band width, because the anchors that gain a
+shorts option have no pant in their colour. The bottleneck moves rather than
+clears. Only a palette-wide rule pays out (5 fits → 14).
+
+`DEAD_LO`/`STEP_LO`/`STEP_HI` at the top encode the forbidden band and the
+target band. Change those to re-test the sensitivity of the answer to where the
+bands are drawn.

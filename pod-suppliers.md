@@ -162,7 +162,46 @@ Staying inside the **Relax Track short family (5933 + 5939)**, one silhouette, t
 
 **A note on ΔL.** The 0.06–0.08 pairings (Shadow/Faded Grey, Bone/Faded Bone, Coal/Faded Black) are *subtle* — close enough that they risk reading as a laundry accident rather than a decision. The pairings that most clearly read as deliberate sit around **ΔL 0.13–0.22**: Athletic Heather over Bone, Shadow over Athletic Heather, Athletic Heather over Faded Bone. All three have a pant in the anchor colour, so each works as both a long and a short fit. Confirm against physical swatches before committing — a 0.06 ΔL is well inside the range that dye-lot variation can swamp.
 
-**What this means for the brand:** the one-house thesis holds, and the tonal-break rule recovers most of what exact matching cost. Eight of the nine anchors above have a matching pant, so the *full* core four works. This is a better answer than any of the three original options because it removes the constraint instead of conceding to it.
+**Correction to an earlier version of this section.** It claimed "eight of the nine anchors have a matching pant." That counted table *rows*, not colours — only **four** of the nine (Bone, Athletic Heather, Black, Shadow) have a pant. The consequence is larger than the arithmetic, and is the subject of the next section.
+
+### Stepping shorts alone achieves nothing — the rule has to be palette-wide
+
+Counting **complete core-four fits** (tee + crew + pant + short, one hue family, never darker going down):
+
+| Regime | Complete fits | Solid | Stepped |
+|---|---|---|---|
+| Strict — exact hex everywhere | 5 | 5 | 0 |
+| Step on **shorts only**, ΔL 0.13–0.22 | **5** | 5 | **0** |
+| Step on shorts only, ΔL 0.10–0.34 | **5** | 5 | **0** |
+| **Step across the whole palette, ΔL 0.13–0.22** | **14** | 5 | 9 |
+| Step across the whole palette, ΔL 0.10–0.34 | 19 | 5 | 14 |
+
+Stepping shorts adds **zero** complete fits, because the anchors that gain a shorts option (Eucalyptus, Army, Petrol Blue, Sand, Coal) have no pant in their colour. Relaxing shorts just moves the bottleneck to pant. The rule only pays out when it applies everywhere.
+
+**The 14 buildable fits under the recommended regime** (`*` = exact on that piece):
+
+| Anchor | Crew | Pant | Short | Grade |
+|---|---|---|---|---|
+| Black `#000000` | Black* | Black* | Black* | Solid |
+| Bone `#D1CDCA` | Bone* | Bone* | Bone* | Solid |
+| Cypress `#51594A` | Cypress* | Cypress* | Cypress* | Solid |
+| Shadow `#626367` | Shadow* | Shadow* | Shadow* | Solid |
+| Athletic Heather `#A4A4A2` | Athletic Heather* | Athletic Heather* | Athletic Heather* | Solid |
+| Navy `#1E202C` | Petrol Blue | Faded Black | Navy* | Step |
+| Midnight Blue `#35374C` | Midnight Blue* | Shadow | Shadow | Step |
+| Coal `#323031` | Coal* | Shadow | Shadow | Step |
+| Petrol Blue `#404A53` | Petrol Blue* | Faded Grey | Faded Blue | Step |
+| Sand `#B7B09D` | Sand* | Butter | Faded Bone | Step |
+| Mushroom `#B2A795` | Ecru | Butter | Faded Bone | Step |
+| Smoke `#98A0A5` | Ecru | Bone | White Heather | Step |
+| Light Grey `#B9B5AC` | Ecru | Butter | White Heather | Step |
+| Granite `#A1A0A5` | Ecru | Bone | White Heather | Step |
+
+Note the spread: the nine stepped fits add warm neutrals (Sand, Mushroom, Light Grey, Granite) and a blue family (Navy, Midnight Blue, Petrol Blue) — both squarely in the value/chroma band the brand was already aiming at.
+
+**The forbidden band.** ΔL 0.06–0.10 is excluded outright, not graded lower. Eight otherwise-valid shorts pairings fall in it: Eucalyptus→Athletic Heather (0.075), Walnut→Faded Grey (0.082), Petrol Blue→Shadow (0.097), Bone→White Heather (0.069), Bone→Faded Bone (0.078), Light Grey→Bone (0.077), Shadow→Faded Grey (0.062), Coal→Faded Black (0.068). At that distance the step reads as a laundry accident, and dye-lot drift can swamp it.
+
+**What this means for the brand:** the one-house thesis holds, and the palette-wide step rule roughly triples the matrix — from 5 fits to 14 — while keeping the customer-facing rule ("one colour, head to toe") completely unchanged. It removes the constraint rather than conceding to it.
 
 **Caveats on the above** 🟡 — this is AS Colour's **US direct-to-consumer** range, which is not necessarily their full wholesale/blank offering, and **Apliiq's carried subset may differ again**. All four relevant styles are confirmed present in Apliiq's catalog (Staple Tee, Mens Relax Crew, Relax Track Pants, Mens Relax Track Shorts) ✅, but Apliiq's per-product colour lists render client-side and could not be read without API credentials. `get_product` is still the check that makes these numbers ✅ for *Apliiq specifically* rather than for AS Colour generally.
 

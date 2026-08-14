@@ -10,13 +10,37 @@ A streetwear brand built around a color system, not just a palette. Positioning:
 
 **Vertical is mandatory, horizontal is optional.** Every piece is designed first to be worn as a full monotone fit, one color head to toe — that's the default, the lead marketing story, and the thing every piece is designed around. Mixing colors across a "row" is a *guarantee* (matched value/chroma across all six hues means any two will read as intentional), not something the brand pushes as equally primary. This was a deliberate pivot from an earlier "two equal axes" framing — monotone-first is simpler to say, easier to sell, and lower QA burden on early production.
 
-### The tonal-break refinement — shorts run one shade lighter
+### The tonal-step rule — one hue, value steps down the body
 
-"Monotone" means **one hue head to toe**, not one hex. Shorts are deliberately specified a step *lighter* than the top in the same hue, so a fit reads as a single colour while still having a visible break at the waist. Same idea for pant where a lighter sibling exists.
+**"Monotone" means one hue head to toe, not one hex.** A fit is built from a single hue family, and pieces may sit at different lightness values, stepping *lighter* as they go down the body. The fit still reads as one colour; the value step gives a deliberate break instead of a flat block.
 
-This started as an aesthetic call and turned out to also be the thing that unlocks the matrix: no AS Colour shorts style carries more than three colours, so strict hex matching capped the whole system at three. The tonal rule takes it to nine. Design and supply agree here, which is a good sign.
+Two grades, and both are features:
 
-The rule is measured, not eyeballed — pairings are matched in **OKLCh** (hue within 22°, or both near-neutral; chroma within 0.045; lightness up by ΔL 0.06–0.34). Target band is **ΔL 0.13–0.22**: below ~0.10 the break stops reading as deliberate and starts looking like a laundry accident, and dye-lot variation can swamp it entirely. Full working in `pod-suppliers.md`.
+- **Solid** — every piece the same colourway, exact hex.
+- **Step** — same hue family, one deliberate value step. Specified as a ΔL, e.g. `−0.15L`.
+
+This started as an aesthetic call about shorts and turned out to be structural. No AS Colour shorts style carries more than three colours, so strict hex matching caps the system at 5 complete core-four fits. Applying the step rule to shorts *only* changes nothing — pant immediately becomes the binding constraint. Applying it **across the whole palette** takes complete fits to **14** (5 solid, 9 stepped). Design and supply point the same way, which is usually a sign the rule is right rather than a rationalisation.
+
+**The rule is measured, not eyeballed.** Pairings are matched in **OKLCh** — perceptually uniform, so one step means the same thing on a dark green as on a pale sand. Hue within 22° (or both near-neutral, where hue angle is meaningless); chroma within 0.045; lightness up by ΔL 0.13–0.22.
+
+**ΔL 0.06–0.10 is a forbidden band, not a lesser grade.** Close enough to read as a laundry accident rather than a decision, and dye-lot variation can swamp it outright. Eight otherwise-valid pairings are excluded by this and must stay excluded.
+
+**Direction is fixed: never darker going down.** A consistent gradient reads as design; a random one reads as accident.
+
+Worth knowing when weighing "solid" against "step": exact hex matching across *different fabrics* is already partly illusory — a jersey tee, a fleece crew and a woven short take the same dye differently. Solid is less solid than it sounds, which is a further argument for specifying the step deliberately rather than chasing a match that the substrate won't hold.
+
+Full working and the matching script in `pod-suppliers.md` and `research/`.
+
+#### Surfacing it in the storefront
+
+The match grade is **merchandising, not a disclosure**. Both grades are sold as deliberate; neither is presented as the compromised version of the other.
+
+- Badge every fit **`SOLID`** or **`STEP`**. Never "exact / approximate", never "close match" — any wording implying one is a degraded version of the other invites the customer to read Step as a defect.
+- On a Step fit, show the actual spec: `STEP −0.15L`. This is the engineered-spec-sheet identity doing real work — it is the same move as printing GSM on a tee, and it is not copyable by a competitor who just bought two black blanks.
+- Let the grade be a **filter**, so a customer who wants the pure block can get it and a customer who wants the break can get that. A filter reads as choice; a caveat reads as apology.
+- The headline rule on the site stays **"one colour, head to toe."** That is still literally true under the step rule — one *hue*. The grade lives in the product spec, one level down, where someone who cares goes looking.
+
+This is why widening to steps does not cost the brand its simple hook. The sellable line is unchanged; what changes is that the spec sheet now has something worth reading on it.
 
 ## The six colors
 
@@ -26,7 +50,7 @@ Sourced as real, orderable blanks — Comfort Colors (via Apliiq) for garments. 
 >
 > **⚠️⚠️ Further: "six" is resolved, but not as six.** AS Colour has been measured against the real matrix (`pod-suppliers.md`). A colourway *does* carry from tee to sweatpant — six do at exact hex. Across the full core four, exact matching gives only **three** (Bone, Athletic Heather, Black), because no AS Colour shorts style carries more than three colours.
 >
-> **The tonal-break rule fixes this** — see "The core rule" below. Letting shorts run one shade lighter in the same hue takes the matrix to **nine** anchors on a single shorts silhouette, eight with a matching pant. The palette should be re-derived from that list, not from the table below, which is now historical.
+> **The tonal-step rule fixes this** — see "The core rule" below. Applied across the *whole* matrix it takes complete core-four fits from **5 to 14**. Applied to shorts alone it achieves nothing (pant immediately becomes the binding constraint), which is why the rule is palette-wide rather than a shorts exception. The palette should be re-derived from that list, not from the table below, which is now historical.
 
 | Code | Brand name | Hex | Sourced as |
 |---|---|---|---|
