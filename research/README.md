@@ -58,3 +58,17 @@ clears. Only a palette-wide rule pays out (5 fits → 14).
 `DEAD_LO`/`STEP_LO`/`STEP_HI` at the top encode the forbidden band and the
 target band. Change those to re-test the sensitivity of the answer to where the
 bands are drawn.
+
+## `verify-step-hexes.mjs`
+
+Checks the STEP hexes and the Bone gamut claim in the `unitsystemflow.html`
+system-flow document. Self-contained — no saved HTML needed, the palette is
+inlined at the top.
+
+Confirms the five computed STEP hexes all land at ΔL +0.150 within tolerance and
+hold hue and chroma inside the match spec. Also measures the real gamut ceiling
+for Bone, which is where the document's stated figure is wrong: max in-gamut ΔL
+holding chroma is 0.0715, not the ~0.12 claimed. The conclusion Bone draws from
+it — no lighter step — is correct and in fact stronger than stated.
+
+Findings written up in `spec-reconciliation.md`.
