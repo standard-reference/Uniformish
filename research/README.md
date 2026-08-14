@@ -72,3 +72,15 @@ holding chroma is 0.0715, not the ~0.12 claimed. The conclusion Bone draws from
 it — no lighter step — is correct and in fact stronger than stated.
 
 Findings written up in `spec-reconciliation.md`.
+
+## `naming-prompt.md` and `market-research-prompt.md`
+
+Prompts for claude.ai chat sessions, kept here so they are version-controlled and
+re-runnable rather than retyped. Both are self-contained — chat has no repo access,
+so every premise they need is restated inline. Update the facts in them before
+re-running; stale premises produce confidently wrong research.
+
+`naming-prompt.md` is the higher-stakes one. The brand's differentiator is a sewn-in
+woven label, so a name change after labels are ordered means scrapping stock. It is
+written to disqualify rather than generate, and it is explicit that a chat session
+can rule names out but cannot clear a trademark.
