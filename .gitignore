@@ -1,0 +1,24 @@
+# Secrets — APLIIQ_SHARED_SECRET must never reach the repo.
+# Apliiq's own docs flag exposure of the shared secret explicitly.
+.env
+.env.*
+!.env.example
+
+# Dependencies / build output
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Logs & coverage
+*.log
+npm-debug.log*
+yarn-error.log*
+coverage/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Local Claude Code settings (machine-specific, not shared)
+.claude/settings.local.json

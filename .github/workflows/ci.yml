@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+# Read-only: nothing in this workflow needs to write to the repo.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  secrets-guard:
+    name: No committed secrets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # .env holds APLIIQ_SHARED_SECRET. Committing it is the one mistake in
+      # this repo that cannot be undone by a revert — the secret would have to
+      # be rotated in the Apliiq dashboard. Fail loudly rather than merge it.
+      - name: Reject tracked .env files
+        run: |
+          tracked=$(git ls-files | grep -E '(^|/)\.env($|\.)' | grep -v '\.env\.example$' || true)
+          if [ -n "$tracked" ]; then
+            echo "::error::Environment files are tracked in git:"
+            echo "$tracked"
+            echo "Remove them, then ROTATE the Apliiq shared secret — a revert is not enough."
+            exit 1
+          fi
+          echo "No tracked .env files."
+
+  check:
+    name: Typecheck, test, build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apliiq-mcp
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apliiq-mcp/package-lock.json
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # No network access is needed: fetch is stubbed throughout. If a test
+      # ever starts needing Apliiq reachability, that is a bug in the test.
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
