@@ -14,6 +14,8 @@ A streetwear brand built around a color system, not just a palette. Positioning:
 
 Sourced as real, orderable blanks — Comfort Colors (via Apliiq) for garments. Approximated hex values below are close enough to build against; confirm against a physical swatch before locking a print run.
 
+> **⚠️ This table is provisional as of the first build session.** The palette is **no longer locked** — the brief became *best quality, best cuts, best fit*, and colours will be taken from whatever the chosen blank house actually offers. The design logic below (the value/chroma band) survives that change and is what to match against; the specific hexes and the Comfort Colors sourcing may not. See `pod-suppliers.md`.
+
 | Code | Brand name | Hex | Sourced as |
 |---|---|---|---|
 | C1 | Jet | `#443E3A` | Comfort Colors "Pepper" |
@@ -38,7 +40,11 @@ Design logic: all six sit in the same narrow band of value and chroma (tonal har
 | SK | Sock (solid) | core — separate product from the patterned Cross socks below |
 | SO | Slip-On | **outsource** — footwear was never going to be self/POD-made regardless of demand |
 
-**Open risk, not yet resolved:** Apliiq's Pant/Shorts blanks run through different suppliers (Bella Canvas, AS Colour, Independent Trading Co) than the Comfort Colors tees/tops. The six-color match is confirmed for Tee/Crewneck; it is *not* confirmed for Pant/Shorts. Independent Trading Co has its own earth-tone line (Bone/Cement/Plum/Smoke) that's a plausible close match, not identical. Decide before launch: match-as-close-as-possible, or launch bottoms in 2–3 hero colors only.
+**Open risk — reframed, still unresolved:** Apliiq's Pant/Shorts blanks run through different suppliers (Bella Canvas, AS Colour, Independent Trading Co) than the Comfort Colors tees/tops. The six-color match is confirmed for Tee/Crewneck; it is *not* confirmed for Pant/Shorts.
+
+The original framing was *match the bottoms to the Comfort Colors tops*, choosing between as-close-as-possible or 2–3 hero colors. **That framing is now superseded.** Since the palette is no longer locked, the better move is to pick **one blank house that makes the entire matrix**, so the monotone rule holds by construction instead of by cross-brand colour matching. AS Colour is the leading candidate — it spans tees, crews, shorts and pants, and Apliiq already carries it.
+
+This hinges on one unanswered question: does a given AS Colour colourway exist in both a tee and a sweatpant? See `pod-suppliers.md` and issue #4.
 
 ## Cross line — the patterned accessory system
 
@@ -51,7 +57,7 @@ Two pattern flavors, deliberately **interleaved, not firewalled** — pairing a 
 
 ## Manufacturing & sourcing
 
-- **Garments (Tee/Crewneck/Pant/Shorts):** Apliiq, zero-MOQ, Comfort Colors blanks, private-labeled. This is the capital-constrained launch path — chosen specifically because building the full 6-color matrix through a real low-MOQ factory would run **$20–40K+** upfront (MOQ multiplies per color, not just per style).
+- **Garments (Tee/Crewneck/Pant/Shorts):** Apliiq, zero-MOQ, private-labeled. **The vendor is settled; the blank is not** — Comfort Colors was the original pick, but AS Colour is the leading candidate on cut/fit and full-matrix coverage. Apliiq itself stays because its sewn-in woven labels are the moat and no competitor offers them. See `pod-suppliers.md`. This is the capital-constrained launch path — chosen specifically because building the full 6-color matrix through a real low-MOQ factory would run **$20–40K+** upfront (MOQ multiplies per color, not just per style).
 - **Socks (solid + Cross patterns):** Printful, sublimation, permanent — see above.
 - **Slip-On:** outsource only, no path through Apliiq/Printful established yet.
 - **Scaling path, once Apliiq margins are the constraint, not capital:** a real low-MOQ manufacturer (e.g. Argyle Haus-tier, ~$18–65/unit at 50-unit minimums) — but narrow to 2 hero colors first (~$8–12K realistic first batch), not the full six at once.
@@ -76,8 +82,8 @@ Positioning explicitly is *not* fast fashion (can't win on scale/price as a POD/
 
 ## Launch sequence
 
-1. Confirm Pant/Shorts color situation (open risk above)
-2. Apliiq MCP built and tested (current active work — see `apliiq-mcp-spec.md`)
+1. Choose the blank house and re-derive the palette from its real range (open risk above; `pod-suppliers.md`)
+2. Apliiq MCP built and tested (built; **not yet verified against the live API** — see `HANDOFF.md`)
 3. Shopify store created, Apliiq app connected, four core products + Cross socks listed
 4. Sizes locked (2–3), care/fiber labels sorted
 5. First 10 sold via payment link + Instagram — no full storefront needed yet
@@ -91,12 +97,16 @@ The system itself is the content — "one rule, one color" and the cares/doesn't
 
 ## Companion files in this project
 
-- `unit-color-system.html` — the interactive spec sheet. Canonical source for the full color rationale copy, the product grid, and the Cross pattern cards. Treat as source of truth for exact wording/values; this doc is the summary.
+- `HANDOFF.md` — **read this first in a new session.** Current state, blockers needing a human, and the suggested order of work.
+- `pod-suppliers.md` — running comparison of POD platforms and blank houses, with evidence marked confirmed / unverified. Where the manufacturing decision gets made.
+- `unit-color-system.html` — the interactive spec sheet. Canonical source for the full color rationale copy, the product grid, and the Cross pattern cards. Treat as source of truth for exact wording/values; this doc is the summary. **Missing from the repo — see issue #6.**
 - `apliiq-mcp-spec.md` — the current active build target. Auth flow, tool list, architecture, open gaps.
+- `apliiq-mcp/` — the MCP server itself, with its own README covering setup and the assumptions still needing live verification.
 
 ## Open items — don't assume these are resolved
 
-- Pant/Shorts exact color match (see Product Matrix section)
+- Blank house choice, and the palette that follows from it (see Product Matrix section and `pod-suppliers.md`)
+- Apliiq MCP is built but **unverified against the live API** — signing, endpoint paths and artwork field names are all assumptions until `npm run smoke` passes
 - Apliiq API access — confirm it's not gated behind a support/approval step
 - Apliiq order creation/status endpoint — auth pattern confirmed, full field-level spec not yet pulled
 - Brand name — "Unit" is provisional. Both "Unit" and "Tones" were checked and have existing trademark conflicts in apparel. Not blocking current work; revisit before any public launch.
@@ -110,11 +120,13 @@ The system itself is the content — "one rule, one color" and the cares/doesn't
 ## Layout
 
 ```
-/                      brand-level context and specs
-  CLAUDE.md            this file
-  apliiq-mcp-spec.md   active build target
-  unit-color-system.html   MISSING — referenced above, never added to the repo
-  apliiq-mcp/          the MCP server (see its own README)
+/                        brand-level context and specs
+  HANDOFF.md             READ FIRST in a new session — state, blockers, next actions
+  CLAUDE.md              this file — brand and product context
+  pod-suppliers.md       POD platform + blank house comparison, evidence for the mfg decision
+  apliiq-mcp-spec.md     build spec for the MCP server
+  unit-color-system.html MISSING — referenced above, never added to the repo (issue #6)
+  apliiq-mcp/            the MCP server (see its own README)
 ```
 
 `unit-color-system.html` is listed above as a companion file and source of truth for exact color copy, but it is **not in this repo**. Until it is added, treat the color table in this file as the working reference and don't assume wording matches the sheet.
