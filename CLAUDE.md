@@ -15,6 +15,8 @@ A streetwear brand built around a color system, not just a palette. Positioning:
 Sourced as real, orderable blanks — Comfort Colors (via Apliiq) for garments. Approximated hex values below are close enough to build against; confirm against a physical swatch before locking a print run.
 
 > **⚠️ This table is provisional as of the first build session.** The palette is **no longer locked** — the brief became *best quality, best cuts, best fit*, and colours will be taken from whatever the chosen blank house actually offers. The design logic below (the value/chroma band) survives that change and is what to match against; the specific hexes and the Comfort Colors sourcing may not. See `pod-suppliers.md`.
+>
+> **⚠️⚠️ Further: "six" is now in doubt, not just the hexes.** AS Colour has been measured against the real matrix (`pod-suppliers.md`). A colourway *does* carry from tee to sweatpant — six of them do — but across the full core four (tee/crew/pant/short) only **three** survive: Bone `#D1CDCA`, Athletic Heather `#A4A4A2`, Black `#000000`. Shorts are the binding constraint at four colours across the entire category. **The "6 colours" figure below is not currently supported by any real blank range** and is pending a brand decision — ship at three, drop shorts from the launch matrix, or mix houses for bottoms. This is open question 3 in `pod-suppliers.md`.
 
 | Code | Brand name | Hex | Sourced as |
 |---|---|---|---|
@@ -40,11 +42,11 @@ Design logic: all six sit in the same narrow band of value and chroma (tonal har
 | SK | Sock (solid) | core — separate product from the patterned Cross socks below |
 | SO | Slip-On | **outsource** — footwear was never going to be self/POD-made regardless of demand |
 
-**Open risk — reframed, still unresolved:** Apliiq's Pant/Shorts blanks run through different suppliers (Bella Canvas, AS Colour, Independent Trading Co) than the Comfort Colors tees/tops. The six-color match is confirmed for Tee/Crewneck; it is *not* confirmed for Pant/Shorts.
+**Open risk — reframed, and now partly measured:** Apliiq's Pant/Shorts blanks run through different suppliers (Bella Canvas, AS Colour, Independent Trading Co) than the Comfort Colors tees/tops. The six-color match is confirmed for Tee/Crewneck; it is *not* confirmed for Pant/Shorts.
 
-The original framing was *match the bottoms to the Comfort Colors tops*, choosing between as-close-as-possible or 2–3 hero colors. **That framing is now superseded.** Since the palette is no longer locked, the better move is to pick **one blank house that makes the entire matrix**, so the monotone rule holds by construction instead of by cross-brand colour matching. AS Colour is the leading candidate — it spans tees, crews, shorts and pants, and Apliiq already carries it.
+The original framing was *match the bottoms to the Comfort Colors tops*, choosing between as-close-as-possible or 2–3 hero colors. **That framing is now superseded.** Since the palette is no longer locked, the better move is to pick **one blank house that makes the entire matrix**, so the monotone rule holds by construction instead of by cross-brand colour matching. AS Colour is the leading candidate — it spans tees, crews, shorts and pants, and Apliiq carries **243** of its products (vs 13 Comfort Colors).
 
-This hinges on one unanswered question: does a given AS Colour colourway exist in both a tee and a sweatpant? See `pod-suppliers.md` and issue #4.
+The question this hinged on — *does a given AS Colour colourway exist in both a tee and a sweatpant?* — is **answered: yes, six do.** But the full core four narrows to three, and shorts are the reason. The open item is no longer research, it is the brand call about how many colours the matrix ships at. See `pod-suppliers.md` and issue #4.
 
 ## Cross line — the patterned accessory system
 

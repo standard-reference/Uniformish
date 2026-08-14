@@ -53,7 +53,7 @@ The rule: `apliiq-client.ts` and `tools.ts` never know which transport is runnin
 |---|---|---|
 | `list_products` | Product API (GET) | ✅ documented |
 | `get_product` | Product API (GET single) — colors/variants live here, this is the one that kills manual catalog-checking | ✅ documented |
-| `upload_artwork` | `POST /v1/Artwork` | ✅ documented |
+| `upload_artwork` | `POST /v1/Artwork` | ✅ documented — body confirmed as `{ "Name": string ≤50, "ImagePath": "https://…" }`. Apliiq **fetches the image from the URL**; it does not accept file bytes. Response returns `Id`, `Name`, `WtoHRatio`, `DateCreated`. |
 | `create_order` | Create Order endpoint | ⚠️ auth pattern confirmed, haven't pulled full field-level spec yet |
 | `get_order_status` | Orders | ⚠️ endpoint exists per API overview, exact shape unconfirmed |
 
@@ -72,4 +72,8 @@ Stdio transport, local, runs inside Claude Code on the web. Zero infrastructure.
 
 **v1 as built ships the three confirmed tools only.** `create_order` and `get_order_status` are deliberately *not* implemented, per §5's own rule — their field-level shapes were never pulled, and guessing them from the auth doc is exactly what §5 warns against. Tracked as a GitHub issue.
 
-Everything below §1 that touches request *bodies* is implemented from this spec document rather than from a live read of help.apliiq.com, because the build environment's egress policy blocks every `*.apliiq.com` host. The signing algorithm is isolated in one exported function with known-answer tests so that if the live API rejects it, there is exactly one place to correct. See `apliiq-mcp/README.md` → "Verify against the live API first".
+Everything below §1 that touches request *bodies* was originally implemented from this spec document rather than from a live read of help.apliiq.com, because the build environment's egress policy blocked every `*.apliiq.com` host. The signing algorithm is isolated in one exported function with known-answer tests so that if the live API rejects it, there is exactly one place to correct. See `apliiq-mcp/README.md` → "Verify against the live API first".
+
+**Update — egress restored, docs read directly.** The signing construction in §1 and the endpoint paths are both confirmed correct. `upload_artwork` was **not**: it had been built to base64 a local file and send `fileName`/`name`/`fileContent`, which is not an API Apliiq exposes. Corrected to the documented `Name`/`ImagePath` shape above, with the body-building logic isolated in `buildArtworkPayload()` and unit-tested, mirroring how `signRequest()` is handled.
+
+This is a concrete instance of the §5 rule paying out: the one tool whose body shape was guessed is the one tool that was wrong. Still outstanding is a live signed request — the signing is *consistent with the docs*, not yet *proven*, and that needs credentials.

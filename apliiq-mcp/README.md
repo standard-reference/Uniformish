@@ -10,13 +10,17 @@ Runs over **stdio, locally, only**. There is no hosted deployment and no HTTP tr
 
 **Read this before trusting any output from this server.**
 
-This server was written in an environment whose egress policy blocked every `*.apliiq.com` host, so no request was ever made against the real API and no documentation page was ever read. Three things were therefore implemented from the spec document rather than confirmed:
+This server was originally written in an environment whose egress policy blocked every `*.apliiq.com` host, so three things went in as assumptions transcribed from the spec. A later session reached the docs and the API host, and checked all three **without credentials**. Current state:
 
-| What | Where | How to confirm |
+| What | Where | Status |
 |---|---|---|
-| The HMAC signature construction | `signRequest()` in `src/apliiq-client.ts` | `npm run smoke` — a 200 means it's right |
-| The catalog endpoint paths | `ENDPOINTS` in `src/apliiq-client.ts` | `npm run smoke` — it probes several candidates and names the working one |
-| `upload_artwork`'s request body field names | `src/tools.ts` | Not covered by the smoke test. Read the Artwork API docs, or use the tool's `extraFields` escape hatch |
+| The HMAC signature construction | `signRequest()` in `src/apliiq-client.ts` | ✅ **Matches the docs.** help.apliiq.com's Authentication page gives `base64(HMACSHA256([APPId][RTS][STATE][Base64_ReqContentIFanyOREmptyString], SHARED_SECRET))` and header `x-apliiq-auth {rts}:{sig}:{appId}:{nonce}` — both as implemented. Still unproven end-to-end: only a signed 200 rules out a subtle encoding mismatch. |
+| The catalog endpoint paths | `ENDPOINTS` in `src/apliiq-client.ts` | ✅ **Confirmed.** Unauthenticated probes return 500 for `/v1/Product` and `/v1/Artwork` (route exists, auth missing) but 404 for `/v1/Products` and `/v1/products` (no such route). |
+| `upload_artwork`'s request body field names | `buildArtworkPayload()` in `src/tools.ts` | ✅ **Corrected — the original guess was wrong.** See below. |
+
+`upload_artwork` was built to take a **local file path** and send `fileName`/`name`/`fileContent` with the image base64-encoded. Apliiq's Artwork API does not work that way: it takes exactly two PascalCase fields, `Name` (≤50 chars) and `ImagePath` (an `https://` URL it fetches server-side). The tool now takes a URL, and `buildArtworkPayload()` is isolated and unit-tested for the same reason `signRequest()` is.
+
+What still needs credentials: a real signed request returning 200. Until `npm run smoke` passes, treat the signing as *consistent with the docs* rather than *proven*.
 
 Everything else — the auth *scheme*, the base URL, the header format — comes straight from the spec and is quoted there.
 
@@ -62,7 +66,7 @@ The server reads credentials from its own process environment. `.env` is only us
 |---|---|---|
 | `list_products` | GET | Find a product's ID. |
 | `get_product` | GET | A single product with its colors and variants. **This is the one that replaces checking the catalog by hand** — use it to confirm a blank actually exists in a colorway before committing to it. |
-| `upload_artwork` | POST | Upload an artwork file. Takes a *local file path*; the server reads and base64-encodes it, so image bytes never pass through the conversation. |
+| `upload_artwork` | POST | Register artwork by URL. Apliiq fetches the image itself, so it takes a publicly reachable `https://` URL — **not** a local file and not image bytes. Returns the artwork `Id` that order and product calls reference. |
 
 ### What is deliberately missing
 

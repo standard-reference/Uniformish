@@ -10,14 +10,12 @@
  * field-level shape before building them, and it has not been resolved.
  */
 
-import { readFile, stat } from "node:fs/promises";
-import { basename, resolve } from "node:path";
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { ApliiqClient, ApliiqError } from "./apliiq-client.js";
 
-/** Refuse to base64 anything larger than this. Base64 inflates by ~33%. */
-const MAX_ARTWORK_BYTES = 25 * 1024 * 1024;
+/** Apliiq's Artwork API documents "Name cannot exceed 50 characters". */
+const MAX_ARTWORK_NAME_LENGTH = 50;
 
 /** Scrubs sensitive strings out of text bound for the model's context. */
 export type Redactor = (text: string) => string;
@@ -33,6 +31,58 @@ export type Redactor = (text: string) => string;
 export function createRedactor(sharedSecret: string): Redactor {
   if (!sharedSecret) return (text) => text;
   return (text) => text.split(sharedSecret).join("[REDACTED APLIIQ_SHARED_SECRET]");
+}
+
+/**
+ * Build the POST /Artwork request body.
+ *
+ * Isolated and exported for the same reason `signRequest` is: it encodes a
+ * request shape owned by Apliiq, so when their API disagrees with us there
+ * should be exactly one place to correct and one place that pins the current
+ * belief in tests.
+ *
+ * Both field names come from help.apliiq.com's Artwork API page, which
+ * documents exactly two required fields and no optional ones. Note that Apliiq
+ * fetches the image itself from `ImagePath` — this endpoint takes a URL, never
+ * file bytes.
+ *
+ * @throws ApliiqError if the URL or name violates a documented constraint.
+ */
+export function buildArtworkPayload(
+  imagePath: string,
+  name?: string,
+): { Name: string; ImagePath: string } {
+  let url: URL;
+  try {
+    url = new URL(imagePath);
+  } catch {
+    throw new ApliiqError(`Not a valid URL: ${imagePath}`);
+  }
+
+  // Documented explicitly: "url must be https://". Apliiq fetches this
+  // server-side, so a plain-http source would also be a downgrade we control.
+  if (url.protocol !== "https:") {
+    throw new ApliiqError(`Artwork URL must use https://, got ${url.protocol}//`);
+  }
+
+  let derived: string;
+  try {
+    derived = decodeURIComponent(url.pathname.split("/").pop() ?? "");
+  } catch {
+    derived = url.pathname.split("/").pop() ?? ""; // Malformed %-escapes: use it raw.
+  }
+  const artworkName = name ?? (derived || "artwork");
+
+  // Documented as "Name cannot exceed 50 characters". Checked here so the
+  // failure names the real problem instead of surfacing an opaque 4xx.
+  if (artworkName.length > MAX_ARTWORK_NAME_LENGTH) {
+    throw new ApliiqError(
+      `Artwork name is ${artworkName.length} characters, over Apliiq's ` +
+        `${MAX_ARTWORK_NAME_LENGTH}-character limit: ${JSON.stringify(artworkName)}`,
+    );
+  }
+
+  return { Name: artworkName, ImagePath: url.toString() };
 }
 
 function ok(payload: unknown, redact: Redactor) {
@@ -109,57 +159,30 @@ export function registerTools(
     {
       title: "Upload artwork to Apliiq",
       description:
-        "Upload an artwork file to Apliiq (POST /Artwork). Pass a path to a local file — the " +
-        "server reads and base64-encodes it, so the image bytes never pass through the " +
-        "conversation. NOTE: the exact field names Apliiq expects in this request body were not " +
-        "verifiable when this tool was written; if it fails with a 4xx, use extraFields to " +
-        "override or add keys rather than guessing repeatedly.",
+        "Register artwork with Apliiq (POST /Artwork). Apliiq fetches the image from a URL you " +
+        "supply — it does not accept file bytes — so the image must already be hosted somewhere " +
+        "publicly reachable over https. Returns the artwork Id, which is what order and product " +
+        "calls reference.",
       inputSchema: {
-        filePath: z
+        imagePath: z
           .string()
-          .min(1)
-          .describe("Absolute or relative path to the artwork file on this machine."),
-        name: z.string().optional().describe("Display name for the artwork. Defaults to the filename."),
-        extraFields: z
-          .record(z.string(), z.unknown())
+          .url()
+          .describe(
+            "Publicly reachable https:// URL of the artwork image. Apliiq fetches it server-side, " +
+              "so it must not require authentication.",
+          ),
+        name: z
+          .string()
           .optional()
           .describe(
-            "Additional top-level keys merged into the request body. Keys set here override " +
-              "the defaults, which is the escape hatch for correcting field names without a code change.",
+            `Display name for the artwork, max ${MAX_ARTWORK_NAME_LENGTH} characters. ` +
+              "Defaults to the filename in the URL.",
           ),
       },
     },
-    async ({ filePath, name, extraFields }) => {
+    async ({ imagePath, name }) => {
       try {
-        const absolutePath = resolve(filePath);
-
-        const stats = await stat(absolutePath).catch(() => null);
-        if (!stats) {
-          return fail(new ApliiqError(`No such file: ${absolutePath}`), redact);
-        }
-        if (!stats.isFile()) {
-          return fail(new ApliiqError(`Not a regular file: ${absolutePath}`), redact);
-        }
-        if (stats.size > MAX_ARTWORK_BYTES) {
-          return fail(
-            new ApliiqError(
-              `Artwork is ${stats.size} bytes, over the ${MAX_ARTWORK_BYTES}-byte limit.`,
-            ),
-            redact,
-          );
-        }
-
-        const fileName = basename(absolutePath);
-        const payload: Record<string, unknown> = {
-          // ASSUMPTION — these key names are not confirmed against Apliiq's
-          // Artwork API docs. See the tool description and README.
-          fileName,
-          name: name ?? fileName,
-          fileContent: (await readFile(absolutePath)).toString("base64"),
-          ...extraFields,
-        };
-
-        return ok(await client.uploadArtwork(payload), redact);
+        return ok(await client.uploadArtwork(buildArtworkPayload(imagePath, name)), redact);
       } catch (error) {
         return fail(error, redact);
       }
