@@ -10,13 +10,23 @@ A streetwear brand built around a color system, not just a palette. Positioning:
 
 **Vertical is mandatory, horizontal is optional.** Every piece is designed first to be worn as a full monotone fit, one color head to toe — that's the default, the lead marketing story, and the thing every piece is designed around. Mixing colors across a "row" is a *guarantee* (matched value/chroma across all six hues means any two will read as intentional), not something the brand pushes as equally primary. This was a deliberate pivot from an earlier "two equal axes" framing — monotone-first is simpler to say, easier to sell, and lower QA burden on early production.
 
+### The tonal-break refinement — shorts run one shade lighter
+
+"Monotone" means **one hue head to toe**, not one hex. Shorts are deliberately specified a step *lighter* than the top in the same hue, so a fit reads as a single colour while still having a visible break at the waist. Same idea for pant where a lighter sibling exists.
+
+This started as an aesthetic call and turned out to also be the thing that unlocks the matrix: no AS Colour shorts style carries more than three colours, so strict hex matching capped the whole system at three. The tonal rule takes it to nine. Design and supply agree here, which is a good sign.
+
+The rule is measured, not eyeballed — pairings are matched in **OKLCh** (hue within 22°, or both near-neutral; chroma within 0.045; lightness up by ΔL 0.06–0.34). Target band is **ΔL 0.13–0.22**: below ~0.10 the break stops reading as deliberate and starts looking like a laundry accident, and dye-lot variation can swamp it entirely. Full working in `pod-suppliers.md`.
+
 ## The six colors
 
 Sourced as real, orderable blanks — Comfort Colors (via Apliiq) for garments. Approximated hex values below are close enough to build against; confirm against a physical swatch before locking a print run.
 
 > **⚠️ This table is provisional as of the first build session.** The palette is **no longer locked** — the brief became *best quality, best cuts, best fit*, and colours will be taken from whatever the chosen blank house actually offers. The design logic below (the value/chroma band) survives that change and is what to match against; the specific hexes and the Comfort Colors sourcing may not. See `pod-suppliers.md`.
 >
-> **⚠️⚠️ Further: "six" is now in doubt, not just the hexes.** AS Colour has been measured against the real matrix (`pod-suppliers.md`). A colourway *does* carry from tee to sweatpant — six of them do — but across the full core four (tee/crew/pant/short) only **three** survive: Bone `#D1CDCA`, Athletic Heather `#A4A4A2`, Black `#000000`. Shorts are the binding constraint at four colours across the entire category. **The "6 colours" figure below is not currently supported by any real blank range** and is pending a brand decision — ship at three, drop shorts from the launch matrix, or mix houses for bottoms. This is open question 3 in `pod-suppliers.md`.
+> **⚠️⚠️ Further: "six" is resolved, but not as six.** AS Colour has been measured against the real matrix (`pod-suppliers.md`). A colourway *does* carry from tee to sweatpant — six do at exact hex. Across the full core four, exact matching gives only **three** (Bone, Athletic Heather, Black), because no AS Colour shorts style carries more than three colours.
+>
+> **The tonal-break rule fixes this** — see "The core rule" below. Letting shorts run one shade lighter in the same hue takes the matrix to **nine** anchors on a single shorts silhouette, eight with a matching pant. The palette should be re-derived from that list, not from the table below, which is now historical.
 
 | Code | Brand name | Hex | Sourced as |
 |---|---|---|---|
