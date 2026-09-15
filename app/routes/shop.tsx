@@ -1,0 +1,158 @@
+import {Link, useLoaderData} from 'react-router';
+import {Money} from '@shopify/hydrogen';
+import type {Route} from './+types/shop';
+import {HueBlock} from '~/components/HueBlock';
+import {DEFAULT_HUE, HUES} from '~/data/hues';
+import {HERO_PIECE, indicativePrice, PIECES} from '~/data/range';
+import {handleQuery, RANGE_PRICES_QUERY} from '~/lib/queries';
+
+export const meta: Route.MetaFunction = () => [
+  {title: 'Shop — Uniform-ish'},
+  {
+    name: 'description',
+    content:
+      'Start with a hue, not a garment. Six matched earth tones across the range, sold as duos and three-piece kits.',
+  },
+];
+
+export async function loader({context}: Route.LoaderArgs) {
+  // Live prices for whichever pieces are actually listed. Anything missing
+  // falls back to the indicative figure and is labelled as such.
+  const listed = await context.storefront
+    .query(RANGE_PRICES_QUERY, {
+      variables: {query: handleQuery(PIECES.map((piece) => piece.handle))},
+      cache: context.storefront.CacheShort(),
+    })
+    .then((result) =>
+      // Same reason as the PDP: the Storefront `query` filter is a search, so
+      // narrow to the exact handles the range defines.
+      result.products.nodes.filter((product) =>
+        PIECES.some((piece) => piece.handle === product.handle),
+      ),
+    )
+    .catch(() => []);
+
+  return {listed};
+}
+
+export default function Shop() {
+  const {listed} = useLoaderData<typeof loader>();
+  const productPath = `/products/${HERO_PIECE.handle}`;
+
+  const priceFor = (handle: string) =>
+    listed.find((product) => product.handle === handle)?.priceRange
+      .minVariantPrice;
+
+  return (
+    <main>
+      <section style={{padding: 'clamp(40px, 6vw, 92px) var(--gutter) clamp(24px, 3vw, 40px)'}}>
+        <span className="eyebrow">Shop · six hues · kits &amp; duos</span>
+        <h1 className="h1" style={{margin: '16px 0 0', fontSize: 'clamp(34px, 4.4vw, 62px)'}}>
+          Start with a hue, not a garment
+        </h1>
+        <p className="lede" style={{margin: '18px 0 0', maxWidth: '54ch'}}>
+          Everything in the range is matched to everything else, so the decision
+          that matters is which hue you want to live in. Pieces come in twos and
+          threes — we don&rsquo;t sell orphans.
+        </p>
+      </section>
+
+      <section style={{padding: '0 var(--gutter) clamp(36px, 4vw, 56px)'}}>
+        <div className="hue-grid">
+          {HUES.map((hue) => (
+            <Link
+              className="hue-card"
+              key={hue.code}
+              to={`${productPath}?Colour=${encodeURIComponent(hue.name)}`}
+              prefetch="intent"
+            >
+              <HueBlock hue={hue} frame caption="Full look" />
+              <p className="hue-card-name">{hue.name}</p>
+              <div className="hue-card-foot" style={{fontSize: 10.5, marginTop: 6}}>
+                <span className="hue-card-code">{hue.code}</span>
+                <span className="hue-card-code">Shop hue</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="offer-split">
+        <div className="offer">
+          <span className="eyebrow-sm">Kit · three pieces</span>
+          <h2 className="h3">The whole look, one add-to-cart</h2>
+          <p>
+            Three pieces in one hue, bundled and priced as a single product.
+            It&rsquo;s the cleanest version of the rule and the only path with a
+            30-day return attached — if a kit isn&rsquo;t right, send it back
+            whole.
+          </p>
+          <span className="price">From ~$219 AUD</span>
+          <Link className="btn btn-solid" to={productPath} prefetch="intent">
+            Build a kit
+          </Link>
+        </div>
+
+        <div className="offer">
+          <span className="eyebrow-sm">Duo · two pieces</span>
+          <h2 className="h3">Two pieces, into what you already own</h2>
+          <p>
+            Pick two pieces in one hue — priced individually, grouped at the
+            cart. Meant to slot into your wardrobe rather than replace it. Final
+            sale, since they&rsquo;re sold as two separate pieces.
+          </p>
+          <span className="price">From ~$148 AUD</span>
+          <Link className="btn btn-outline" to={productPath} prefetch="intent">
+            Build a duo
+          </Link>
+        </div>
+      </section>
+
+      <section style={{padding: 'clamp(36px, 5vw, 76px) var(--gutter)'}}>
+        <div className="section-head" style={{gap: '12px 32px', marginBottom: 22}}>
+          <h2 className="h3">The pieces</h2>
+          <span className="meta push-right" style={{fontSize: 10.5}}>
+            All six hues · ~ indicative price
+          </span>
+        </div>
+
+        <div className="range-list">
+          {PIECES.map((piece) => {
+            const live = priceFor(piece.handle);
+            return (
+              <div className="range-row" key={piece.key}>
+                <span
+                  className="thumb"
+                  style={{background: DEFAULT_HUE.hex}}
+                  aria-hidden="true"
+                />
+                <span className="name">
+                  {live ? (
+                    <Link to={`/products/${piece.handle}`} prefetch="intent">
+                      {piece.name}
+                    </Link>
+                  ) : (
+                    piece.name
+                  )}
+                </span>
+                <span className="fit">{piece.fit}</span>
+                <span className="price">
+                  {live ? <Money data={live} /> : `${indicativePrice(piece)} AUD`}
+                </span>
+                <span className="status">
+                  {live ? 'In stock' : piece.confirmed ? 'Confirmed' : 'Price TBC'}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+
+        <p className="lede" style={{margin: '20px 0 0', maxWidth: '56ch', fontSize: 15}}>
+          Slip-ons and socks round out the hue system and land next. Patterns —
+          the same six hues printed together — arrive as single accent pieces,
+          not a separate line.
+        </p>
+      </section>
+    </main>
+  );
+}

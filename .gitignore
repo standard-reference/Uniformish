@@ -1,19 +1,24 @@
-# Secrets — APLIIQ_SHARED_SECRET must never reach the repo.
-# Apliiq's own docs flag exposure of the shared secret explicitly.
+node_modules
+
+# Build output
+/dist
+/build
+/.cache
+/.mf
+*.tsbuildinfo
+
+# React Router generated route types (rebuilt by `npm run typecheck`)
+/.react-router
+
+# Local environment. Never commit a real storefront token or session secret —
+# .env.example carries the key names with empty values and is the only one
+# that gets committed.
 .env
 .env.*
 !.env.example
 
-# Dependencies / build output
-node_modules/
-dist/
-*.tsbuildinfo
-
-# Logs & coverage
-*.log
-npm-debug.log*
-yarn-error.log*
-coverage/
+# Shopify CLI
+.shopify
 
 # Editor / OS
 .DS_Store

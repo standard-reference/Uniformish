@@ -1,150 +1,211 @@
-# Project Context — Unit (working name)
+# Uniform-ish — project context
 
-This file is project-wide context, not a task spec. It exists so any Claude Code session — this one or a future one — has the full picture without re-explaining it. Task-specific detail lives in companion files (see bottom).
+This file is project-wide context, not a task spec. It exists so any session has
+the full picture without re-explaining it.
+
+> **History:** this repo previously held brand/supplier research and an Apliiq
+> MCP server. Both were removed in the reset that introduced this storefront —
+> the repo is now the storefront and nothing else. The Apliiq work is still in
+> git history if it is ever wanted back.
+
+---
 
 ## What this is
 
-A streetwear brand built around a color system, not just a palette. Positioning: accessible premium, sitting above Uniqlo U's value tier and below Fear of God Essentials/Represent's premium tier — the differentiator is the systemized, engineered-spec-sheet identity, not the earth-tone aesthetic itself (that lane is already crowded).
+A streetwear brand built around a colour system, not just a palette, sold from a
+custom Shopify Hydrogen storefront. Australian, priced in AUD, made to order.
+
+**Positioning:** accessible premium. Above Uniqlo U's value tier, below Fear of
+God Essentials. The differentiator is the systemised, engineered identity — not
+the earth-tone aesthetic, which is a crowded lane on its own.
+
+**Brand name:** "Uniform-ish". Earlier working names were "Unit" and "Tones";
+both had existing apparel trademark conflicts. Uniform-ish has **not** been
+cleared in Class 25 — do that before anything public.
 
 ## The core rule
 
-**Vertical is mandatory, horizontal is optional.** Every piece is designed first to be worn as a full monotone fit, one color head to toe — that's the default, the lead marketing story, and the thing every piece is designed around. Mixing colors across a "row" is a *guarantee* (matched value/chroma across all six hues means any two will read as intentional), not something the brand pushes as equally primary. This was a deliberate pivot from an earlier "two equal axes" framing — monotone-first is simpler to say, easier to sell, and lower QA burden on early production.
+**One hue, head to toe. Not one hex.**
 
-## The six colors
+Stay inside a single hue family across a whole fit and it reads as monotone,
+whether every piece matches exactly or steps lighter toward the feet. The rule
+is the product; the garments are how you apply it.
 
-Sourced as real, orderable blanks — Comfort Colors (via Apliiq) for garments. Approximated hex values below are close enough to build against; confirm against a physical swatch before locking a print run.
+Two consequences that show up all over the site:
 
-> **⚠️ This table is provisional as of the first build session.** The palette is **no longer locked** — the brief became *best quality, best cuts, best fit*, and colours will be taken from whatever the chosen blank house actually offers. The design logic below (the value/chroma band) survives that change and is what to match against; the specific hexes and the Comfort Colors sourcing may not. See `pod-suppliers.md`.
+1. **No orphan pieces.** Every order is at least two pieces in one hue — a duo
+   (two separately-sold pieces) or a kit (three pieces, one bundled product).
+   Enforced at the register and nowhere else. `MIN_PIECES_PER_ORDER` in
+   `app/data/range.ts` is the single source of that number; the cart gates
+   checkout on it.
+2. **Patterns work the opposite way.** One printed piece against plain ones,
+   drawn from the same six hues. Not a separate line.
 
-| Code | Brand name | Hex | Sourced as |
+## The six hues
+
+Canonical values live in **`app/data/hues.ts`** — that module is the source of
+truth, not this table. Reproduced here for orientation only:
+
+| Code | Name  | Hex       |
+|------|-------|-----------|
+| J-01 | Jet   | `#1C1B19` |
+| B-02 | Bone  | `#E8E2D4` |
+| M-03 | Moss  | `#4A4F3C` |
+| C-04 | Clay  | `#A9634B` |
+| S-05 | Slate | `#5A6470` |
+| U-06 | Umber | `#5C4636` |
+
+Design logic: all six sit on the same narrow band of lightness and chroma, held
+inside set OKLCh tolerances. That band is *why* any two read as chosen. **If a
+hue ever needs substituting, match it to the band — not to a hue on a colour
+wheel.** Each hue also carries `dark` / `light` / `lighter` steps, used for the
+stepped-look blocks.
+
+Colours are matched to Shopify option values by name, case-insensitively, and
+under either spelling of Colour/Color (`isHueOption`). An unmapped colour falls
+back to the Storefront swatch rather than breaking the page.
+
+## The range
+
+`app/data/range.ts` holds the roadmap. Only the crewneck is confirmed; the rest
+carry indicative prices and render with a `~`.
+
+| Piece | Fit | Price (AUD) | Status |
 |---|---|---|---|
-| C1 | Jet | `#443E3A` | Comfort Colors "Pepper" |
-| C2 | Bone | `#E7CEB5` | Comfort Colors "Ivory" (confirmed hex) |
-| C3 | Moss | `#7E8873` | Comfort Colors "Moss" — same name |
-| C4 | Clay | `#B36A48` | Comfort Colors "Terracotta" |
-| C5 | Slate | `#425563` | Comfort Colors "Denim" (confirmed hex) |
-| C6 | Umber | `#A69F88` | Comfort Colors "Sandstone" |
+| Oversized Crewneck | Oversized | $89 | confirmed, launch piece |
+| Boxy Tee | Relaxed | ~$59 | price TBC |
+| Tapered Jogger | Lean | ~$99 | price TBC |
+| Mid Short | Lean | ~$79 | price TBC |
 
-Design logic: all six sit in the same narrow band of value and chroma (tonal harmony), which is *why* any two can be worn together and still read as chosen. This matters more than matching any individual hex exactly — if a color needs substituting later, match it to this band, not to a hue on a color wheel.
+Slip-ons and socks come later. The crewneck is the one deliberately oversized
+cut; everything else sits lean.
 
-## The product matrix — 6 colors × 8 silhouettes
+**Fabric:** sublimated poly knit. Sublimation puts dye inside the fibre, which
+is what lets six hues land on exact specified values instead of drifting between
+batches. A cotton line follows once the same tolerances hold on it.
 
-| Code | Item | Status |
-|---|---|---|
-| T | Tee | core |
-| CN | Crewneck | core |
-| HD | Hoodie | **later** — self/POD-manufacture cost too high to launch with |
-| PT | Pant | core |
-| SH | Shorts | core |
-| JK | Jacket | **later** — same reason as Hoodie |
-| SK | Sock (solid) | core — separate product from the patterned Cross socks below |
-| SO | Slip-On | **outsource** — footwear was never going to be self/POD-made regardless of demand |
+**Fulfilment:** made to order through a print partner — 2–5 business days to
+make, 3–7 in transit. No warehouse, no dead stock.
 
-**Open risk — reframed, still unresolved:** Apliiq's Pant/Shorts blanks run through different suppliers (Bella Canvas, AS Colour, Independent Trading Co) than the Comfort Colors tees/tops. The six-color match is confirmed for Tee/Crewneck; it is *not* confirmed for Pant/Shorts.
+**Returns:** kits return whole within 30 days. Duos are final sale (two
+separately-sold pieces, nothing to partially unwind). Faulty or misprinted
+pieces are replaced or refunded in full, always. *There is no free size-remake
+policy* — it was deliberately removed; don't reintroduce it.
 
-The original framing was *match the bottoms to the Comfort Colors tops*, choosing between as-close-as-possible or 2–3 hero colors. **That framing is now superseded.** Since the palette is no longer locked, the better move is to pick **one blank house that makes the entire matrix**, so the monotone rule holds by construction instead of by cross-brand colour matching. AS Colour is the leading candidate — it spans tees, crews, shorts and pants, and Apliiq already carries it.
-
-This hinges on one unanswered question: does a given AS Colour colourway exist in both a tee and a sweatpant? See `pod-suppliers.md` and issue #4.
-
-## Cross line — the patterned accessory system
-
-Two pattern flavors, deliberately **interleaved, not firewalled** — pairing a considered monotone fit with a "doesn't care" patterned sock (or vice versa) is the actual point, not a risk to be managed. (This corrected an earlier instinct to keep the flavors ratio-controlled/separated — that was wrong; mixing them is the mechanic.)
-
-- **Bridge** — sophisticated tonal patterns, each built from 3 of the 6 core colors (Warm Bridge, Cool Bridge, Anchor Bridge)
-- **Novelty** — character/graphic motifs (e.g. "avocado in sunglasses"), still palette-locked to the 6 colors so it stays legible as the same brand
-- **Production home: Printful, via sublimation, permanently** — not a stopgap. Sublimation prints across the whole surface rather than onto pre-dyed stock, so it hits exact hex values with zero MOQ. This is confirmed *better* for socks than jacquard would have been.
-- **Sock length: crew, not ankle** — more leg-panel canvas for the pattern to actually read.
-
-## Manufacturing & sourcing
-
-- **Garments (Tee/Crewneck/Pant/Shorts):** Apliiq, zero-MOQ, private-labeled. **The vendor is settled; the blank is not** — Comfort Colors was the original pick, but AS Colour is the leading candidate on cut/fit and full-matrix coverage. Apliiq itself stays because its sewn-in woven labels are the moat and no competitor offers them. See `pod-suppliers.md`. This is the capital-constrained launch path — chosen specifically because building the full 6-color matrix through a real low-MOQ factory would run **$20–40K+** upfront (MOQ multiplies per color, not just per style).
-- **Socks (solid + Cross patterns):** Printful, sublimation, permanent — see above.
-- **Slip-On:** outsource only, no path through Apliiq/Printful established yet.
-- **Scaling path, once Apliiq margins are the constraint, not capital:** a real low-MOQ manufacturer (e.g. Argyle Haus-tier, ~$18–65/unit at 50-unit minimums) — but narrow to 2 hero colors first (~$8–12K realistic first batch), not the full six at once.
-- **Hoodie/Jacket move off "later"** only after Tee/Crewneck/Pant/Shorts have validated fit and real demand.
-
-## Pricing (validated against Essentials/Uniqlo U/Asket comps)
-
-- Tee: $35–45
-- Crewneck: ~$55–70
-- Pant/Shorts: similar range to Crewneck, tbd exact
-- Hoodie/Jacket (once live): $70–95 / higher
-- Socks (solid + Cross): $22–30
-
-Positioning explicitly is *not* fast fashion (can't win on scale/price as a POD/low-MOQ brand) — it's accessible premium, priced clearly above Shein-tier, below hype/luxury.
-
-## Tech architecture
-
-- **Shopify** — backend of record: checkout, payments, tax, and order routing. The native Apliiq↔Shopify app handles fulfillment automation; this is *not* being rebuilt custom.
-- **Custom frontend** — built via Claude Code, using Shopify's **Storefront API** for product/cart data, handing off to Shopify's hosted checkout for payment. This is headless commerce, not a conflict with "custom frontend + Shopify backend" — Apliiq's fulfillment automation still fires because the order still lands in Shopify regardless of who built the browsing UI.
-- **Shopify Dev MCP** — local, dev-time only, gives Claude Code the Storefront/Admin API schema while building. Not the same thing as the official Shopify-Claude connector (store management) or Storefront MCP (ambient AI-shopping-agent discovery) — those are separate, unrelated to this build.
-- **Apliiq MCP** — custom-built (see `apliiq-mcp-spec.md`). HMAC-signed auth, not a bearer token. **Local/stdio only for now, inside Claude Code — no hosting.** Architected with a client/transport split specifically so remote hosting (Cloudflare Workers) can be added later without a rewrite, if/when there's a real reason to query Apliiq from claude.ai chat instead of a coding session.
-
-## Launch sequence
-
-1. Choose the blank house and re-derive the palette from its real range (open risk above; `pod-suppliers.md`)
-2. Apliiq MCP built and tested (built; **not yet verified against the live API** — see `HANDOFF.md`)
-3. Shopify store created, Apliiq app connected, four core products + Cross socks listed
-4. Sizes locked (2–3), care/fiber labels sorted
-5. First 10 sold via payment link + Instagram — no full storefront needed yet
-6. Real photos: founder-modeled, shot by a connected photographer — resourced, not a blocker
-7. Custom frontend built against Storefront API once real products exist in Shopify — the existing interactive sheet (`unit-color-system.html`) is most of this UI already; it needs wiring to real product/variant data, not a rebuild
-8. Hoodie/Jacket/Slip-On graduate off "later" only after step 5 validates demand
-
-## Marketing (low-cost, no paid ads early)
-
-The system itself is the content — "one rule, one color" and the cares/doesn't-care Bridge/Novelty sock pairing are both native short-form hooks. Founder-modeled photos + a pre-launch waitlist landing page. Seed 5–10 micro-creators with free product instead of paid reach. Paid ads deliberately deferred until there's a pixel with real data.
-
-## Companion files in this project
-
-- `HANDOFF.md` — **read this first in a new session.** Current state, blockers needing a human, and the suggested order of work.
-- `pod-suppliers.md` — running comparison of POD platforms and blank houses, with evidence marked confirmed / unverified. Where the manufacturing decision gets made.
-- `unit-color-system.html` — the interactive spec sheet. Canonical source for the full color rationale copy, the product grid, and the Cross pattern cards. Treat as source of truth for exact wording/values; this doc is the summary. **Missing from the repo — see issue #6.**
-- `apliiq-mcp-spec.md` — the current active build target. Auth flow, tool list, architecture, open gaps.
-- `apliiq-mcp/` — the MCP server itself, with its own README covering setup and the assumptions still needing live verification.
-
-## Open items — don't assume these are resolved
-
-- Blank house choice, and the palette that follows from it (see Product Matrix section and `pod-suppliers.md`)
-- Apliiq MCP is built but **unverified against the live API** — signing, endpoint paths and artwork field names are all assumptions until `npm run smoke` passes
-- Apliiq API access — confirm it's not gated behind a support/approval step
-- Apliiq order creation/status endpoint — auth pattern confirmed, full field-level spec not yet pulled
-- Brand name — "Unit" is provisional. Both "Unit" and "Tones" were checked and have existing trademark conflicts in apparel. Not blocking current work; revisit before any public launch.
+**No reviews anywhere on the site.** Also deliberate. No review module, no
+star ratings, no "be the first to review" placeholder.
 
 ---
 
 # Working in this repo
 
-*(Section added when the repo was first scaffolded. Everything above is the brand/product context; everything below is how to actually work here.)*
+## What it is
+
+A Shopify Hydrogen storefront: **Hydrogen 2026.4, React Router 7, Vite, Oxygen.**
+Shopify is the backend of record — checkout, payments, tax, order routing.
+This app is the browsing UI in front of it, talking to the **Storefront API** and
+handing off to Shopify's hosted checkout.
 
 ## Layout
 
 ```
-/                        brand-level context and specs
-  HANDOFF.md             READ FIRST in a new session — state, blockers, next actions
-  CLAUDE.md              this file — brand and product context
-  pod-suppliers.md       POD platform + blank house comparison, evidence for the mfg decision
-  apliiq-mcp-spec.md     build spec for the MCP server
-  unit-color-system.html MISSING — referenced above, never added to the repo (issue #6)
-  apliiq-mcp/            the MCP server (see its own README)
+app/
+  data/          brand content — the hue system and the range. Not commerce data.
+    hues.ts      the six hues, their steps, and option-name matching
+    range.ts     pieces, size chart, PDP tabs, FAQs, shipping windows, order terms
+  components/    Header, Footer, PageLayout, Aside (overlays), cart, ProductForm…
+  lib/           Storefront queries, companion-variant matching, session, context
+  routes/        file-based routes (React Router flat routes)
+  styles/        reset.css + app.css — tokens first, then blocks
+  assets/fonts/  self-hosted JetBrains Mono (latin + latin-ext subsets)
 ```
 
-`unit-color-system.html` is listed above as a companion file and source of truth for exact color copy, but it is **not in this repo**. Until it is added, treat the color table in this file as the working reference and don't assume wording matches the sheet.
+**The `app/data` vs Storefront split is deliberate.** Shopify owns products,
+variants, prices and the cart. This repo owns the hue system, the size chart and
+the standing editorial copy — things that outlive any one product listing and get
+edited as copy, not as merchandising. Don't move commerce data into `app/data`,
+and don't put brand copy behind a metafield just because it can be.
 
-## Ground rules
+## Routes
 
-- **`APLIIQ_SHARED_SECRET` never enters git.** `.env` is gitignored; `.env.example` carries the key names with empty values and is the only env file that gets committed. If a secret is ever committed, rotating it in the Apliiq dashboard is the fix — removing the commit is not sufficient on its own.
-- **Don't build against unconfirmed API shapes.** Spec §5 sets this rule for the order endpoints; it applies generally. If a request body's field names haven't been read from Apliiq's docs, the tool doesn't ship — it becomes an issue.
-- **Branch and PR, don't push to `main`.** CI runs typecheck + tests on every push and PR.
+| Path | Page |
+|---|---|
+| `/` | Home |
+| `/products/:handle` | PDP — hue + size selection, duo/kit pairing |
+| `/shop` | Shop — hue grid, kits & duos, the range table |
+| `/about` | About |
+| `/size-and-fit` | Size & fit guide |
+| `/shipping-and-faq` | Shipping, returns & FAQ |
+| `/cart` | Cart as a page (the drawer is the primary surface) |
+
+Plus the scaffold's `/collections/*`, `/search`, `/policies/*`, `/account/*`,
+`robots.txt` and `sitemap.xml`.
+
+Header nav is **fixed in `app/components/Header.tsx`**, not driven by a Shopify
+menu — these destinations are the brand's structure, and shouldn't change
+because someone reorders a menu in the admin. Note the nav has **no crewneck
+entry**; the product is reached from Shop, the hue grid and the hero.
+
+## Products and the pairing UI
+
+The PDP resolves companion pieces from the Storefront API by handle
+(`COMPANION_KEYS` → `Piece.handle`). A piece that isn't listed yet simply
+doesn't come back, and the pairing panel hides itself — the PDP falls back to a
+plain add-to-cart, and the two-piece rule is still enforced at the cart. Nothing
+in the UI invents a variant that doesn't exist: if a companion isn't made in the
+selected hue, the option is disabled and says so.
+
+`handleQuery()` builds a Storefront **search** filter, not an exact match, so
+both the PDP and `/shop` re-filter the results against known handles. Keep that.
 
 ## Commands
 
-All commands run from `apliiq-mcp/`:
-
 ```
 npm install
-npm run typecheck     # tsc --noEmit
-npm test              # node:test, no network required
-npm run build         # emit dist/
-npm run smoke         # LIVE call to Apliiq — needs .env and network reachability
+npm run dev         # MiniOxygen dev server on :3000, with codegen
+npm run build       # production build
+npm run preview     # build, then serve the built app
+npm run typecheck   # react-router typegen && tsc --noEmit
+npm run codegen     # regenerate storefrontapi.generated.d.ts
+npm run lint
 ```
+
+`npm run dev` works with no Shopify credentials — Hydrogen falls back to
+**mock.shop**, whose products are generic samples (sweatpants, slides) rather
+than this range. Hue swatches, pairing and the real handles only light up
+against a real storefront.
+
+## Ground rules
+
+- **Secrets never enter git.** `.env` is gitignored; `.env.example` carries the
+  key names with empty values and is the only env file committed.
+- **Regenerate, don't hand-edit.** `storefrontapi.generated.d.ts` and
+  `customer-accountapi.generated.d.ts` are codegen output. Change a query, then
+  run `npm run codegen`.
+- **Don't fabricate commerce data.** If a product, variant or price isn't in the
+  Storefront API, show the indicative figure and label it, or hide the control.
+  `Piece.confirmed` exists for exactly this.
+- **Placeholders are labelled.** Every colour block standing in for photography
+  carries a caption naming the shot it's holding a place for. Keep that when
+  adding new ones — an unlabelled placeholder ships as a bug.
+- **Copy rules.** No reviews. No size-remake policy. Don't reintroduce
+  apologetic "we're a new brand" framing — the one place newness is mentioned is
+  the "why does it take two weeks" FAQ, where it explains the made-to-order
+  pipeline, and that is enough.
+- **Branch and PR, don't push to `main`.** CI runs typecheck and build.
+
+## Not done yet
+
+- **English only, no i18n.** `i18n` is pinned to `EN`/`AU` in
+  `app/lib/context.ts` and the app was scaffolded with `--markets none`.
+  Translations and any Shopify apps are a deliberate later step.
+- **Photography.** Every image is a labelled colour block. Real shots want the
+  same crop and lighting per hue.
+- **Newsletter signup** in the footer is not wired to a list provider. It is
+  left as a plain form rather than a fake success state.
+- **Kits are not a real Shopify product yet.** The kit path in the PDP bundles
+  three separate line items. A true bundled product (needed for the 30-day kit
+  return to mean anything at checkout) is still to be modelled in Shopify.
+- **Trademark clearance** for "Uniform-ish" in Class 25.
+- **`hello@uniform-ish.com`** in the footer, and the Privacy/Terms links, assume
+  a domain and Shopify policy pages that don't exist yet.

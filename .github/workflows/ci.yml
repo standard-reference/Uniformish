@@ -20,26 +20,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # .env holds APLIIQ_SHARED_SECRET. Committing it is the one mistake in
-      # this repo that cannot be undone by a revert — the secret would have to
-      # be rotated in the Apliiq dashboard. Fail loudly rather than merge it.
+      # .env holds SESSION_SECRET and the Storefront API tokens. Committing it
+      # is the one mistake here that a revert does not undo — the credentials
+      # would have to be rotated in the Shopify admin. Fail loudly instead.
       - name: Reject tracked .env files
         run: |
           tracked=$(git ls-files | grep -E '(^|/)\.env($|\.)' | grep -v '\.env\.example$' || true)
           if [ -n "$tracked" ]; then
             echo "::error::Environment files are tracked in git:"
             echo "$tracked"
-            echo "Remove them, then ROTATE the Apliiq shared secret — a revert is not enough."
+            echo "Remove them, then ROTATE the credentials — a revert is not enough."
             exit 1
           fi
           echo "No tracked .env files."
 
   check:
-    name: Typecheck, test, build
+    name: Typecheck, lint, build
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: apliiq-mcp
     steps:
       - uses: actions/checkout@v4
 
@@ -47,17 +44,18 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-          cache-dependency-path: apliiq-mcp/package-lock.json
 
       - run: npm ci
 
+      # Codegen is checked in, so regenerating here proves the committed types
+      # still match the queries rather than silently drifting from them.
       - name: Typecheck
         run: npm run typecheck
 
-      # No network access is needed: fetch is stubbed throughout. If a test
-      # ever starts needing Apliiq reachability, that is a bug in the test.
-      - name: Test
-        run: npm test
+      - name: Lint
+        run: npm run lint
 
       - name: Build
         run: npm run build
+        env:
+          SESSION_SECRET: ci-build-only
