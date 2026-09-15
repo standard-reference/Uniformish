@@ -497,6 +497,18 @@ a:hover {
   background: var(--weave);
 }
 
+/*
+ * Real photography fills the block and covers the weave. Painted after the
+ * ::before pseudo-element, so the placeholder texture sits underneath.
+ */
+.hue-block img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .hue-block.has-frame::after {
   content: '';
   position: absolute;
@@ -1018,12 +1030,6 @@ a:hover {
 .pdp-media-pair .hue-block {
   aspect-ratio: 1 / 1;
   padding: 14px;
-}
-
-.pdp-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .pdp-main {
