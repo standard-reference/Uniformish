@@ -2,67 +2,90 @@
  * The range, the size chart and the standing editorial copy.
  *
  * Everything here is brand content that outlives any one Shopify product.
- * Prices marked `confirmed: false` are indicative and render with a `~` — they
- * are roadmap figures, not commerce data, and the Shop page says so.
  *
- * `handle` is the Shopify product handle a piece will be sold under. A piece
- * whose product does not exist in the connected storefront is simply not
- * rendered as buyable; nothing here fabricates a variant.
+ * `handle` and `basePrice` mirror the live catalogue on smsg1t-j1.myshopify.com.
+ * Prices shown to a buyer always come from the Storefront API via `<Money>`, so
+ * they arrive already converted to that buyer's currency by Shopify Markets —
+ * `basePrice` is the EUR base, used only for roadmap figures on the Shop page
+ * and for ordering the range. Never render it as the price of a listed product.
  */
 export type Piece = {
   key: string;
   name: string;
   fit: string;
-  /** AUD. Indicative unless `confirmed`. */
-  price: number;
-  confirmed: boolean;
-  /** Shopify product handle, once the piece is listed. */
+  /** EUR base price. Buyers see a Markets-converted figure from Shopify. */
+  basePrice: number;
+  /** True once the piece is listed and buyable in the store. */
+  listed: boolean;
+  /** Shopify product handle. */
   handle: string;
+  /** Sizes the live product offers, for reference in the fit guide. */
+  sizes: readonly string[];
+  /** Hues the live product is actually made in. Empty = no colour option. */
+  hues: readonly string[];
 };
 
 export const PIECES: Piece[] = [
   {
-    key: 'tee',
-    name: 'Boxy Tee',
-    fit: 'Relaxed',
-    price: 59,
-    confirmed: false,
-    handle: 'boxy-tee',
-  },
-  {
     key: 'crew',
     name: 'Oversized Crewneck',
     fit: 'Oversized',
-    price: 89,
-    confirmed: true,
-    handle: 'oversized-crewneck',
+    basePrice: 62,
+    listed: true,
+    handle: 'uniform-ish-embroidered-crewneck-sweatshirt',
+    sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+    hues: ['Jet', 'Moss', 'Slate'],
   },
   {
-    key: 'jogger',
-    name: 'Tapered Jogger',
+    key: 'tee',
+    name: 'Heavyweight Tee',
+    fit: 'Regular',
+    basePrice: 42,
+    listed: true,
+    handle: 'uniform-ish-embroidered-tee',
+    sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+    hues: [],
+  },
+  {
+    key: 'sweatpant',
+    name: 'Tapered Sweatpant',
     fit: 'Lean',
-    price: 99,
-    confirmed: false,
-    handle: 'tapered-jogger',
+    basePrice: 64,
+    listed: true,
+    handle: 'uniform-ish-embroidered-sweatpants',
+    sizes: ['XS', 'S', 'M', 'L', 'XL', '2XL'],
+    hues: [],
   },
   {
     key: 'short',
-    name: 'Mid Short',
-    fit: 'Lean',
-    price: 79,
-    confirmed: false,
-    handle: 'mid-short',
+    name: 'Fleece Short',
+    fit: 'Relaxed',
+    basePrice: 54,
+    listed: true,
+    handle: 'uniform-ish-embroidered-shorts',
+    sizes: ['S', 'M', 'L', 'XL', '2XL'],
+    hues: [],
+  },
+  {
+    key: 'sock',
+    name: 'Crew Sock',
+    fit: 'Cushioned',
+    basePrice: 46,
+    listed: true,
+    handle: 'uniform-ish-embroidered-socks',
+    sizes: ['S/M', 'L/XL'],
+    hues: ['Jet', 'Umber'],
   },
 ];
 
 /** The launch piece. Every "shop" call to action points here. */
-export const HERO_PIECE = PIECES[1];
+export const HERO_PIECE = PIECES[0];
 
 /** Pieces offered as the second half of a look, in display order. */
-export const COMPANION_KEYS = ['tee', 'jogger', 'short'] as const;
+export const COMPANION_KEYS = ['tee', 'sweatpant', 'short', 'sock'] as const;
 
 /** Pieces bundled into a three-piece kit. */
-export const KIT_KEYS = ['crew', 'tee', 'jogger'] as const;
+export const KIT_KEYS = ['crew', 'tee', 'sweatpant'] as const;
 
 /** Minimum pieces in one hue per order. The rule the range is built on. */
 export const MIN_PIECES_PER_ORDER = 2;
@@ -75,12 +98,17 @@ export function pieceByHandle(handle: string): Piece | undefined {
   return PIECES.find((piece) => piece.handle === handle);
 }
 
-/** Indicative prices carry a `~`; confirmed ones don't. */
-export function indicativePrice(piece: Piece): string {
-  return `${piece.confirmed ? '' : '~'}$${piece.price}`;
+/** EUR base total for a set of pieces — a "from" figure, not a quoted price. */
+export function baseTotal(keys: readonly string[]): number {
+  return keys.reduce((sum, key) => sum + (getPiece(key)?.basePrice ?? 0), 0);
 }
 
-export const SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'] as const;
+/**
+ * Hues the crewneck is currently made in. The rest of the six are designed but
+ * not yet in production, and the UI marks them as such rather than linking to a
+ * variant that does not exist.
+ */
+export const LIVE_HUES = HERO_PIECE.hues;
 
 export type SizeRow = {
   size: string;
@@ -93,19 +121,11 @@ export type SizeRow = {
 };
 
 /**
- * Oversized crewneck, measured flat, in centimetres with inch equivalents.
- * Tolerance ±2cm. Still to be confirmed against the final blank spec sheet.
+ * Oversized crewneck, measured flat, centimetres with inch equivalents.
+ * Tolerance ±2cm. Still provisional — to be confirmed against the AS Colour
+ * 5160 spec sheet the live product is built on.
  */
 export const SIZE_CHART: SizeRow[] = [
-  {
-    size: 'XS',
-    chestCm: 55,
-    chestIn: 21.7,
-    lengthCm: 64,
-    lengthIn: 25.2,
-    sleeveCm: 51,
-    sleeveIn: 20.1,
-  },
   {
     size: 'S',
     chestCm: 57.5,
@@ -168,7 +188,7 @@ export const SIZE_CHART_PREVIEW = SIZE_CHART.filter((row) =>
 );
 
 export const SIZE_CHART_FOOTNOTE =
-  'Centimetres / inches · measured flat · ±2cm · pending final blank spec';
+  'Centimetres / inches · measured flat · ±2cm · provisional against the blank spec';
 
 export type ProductTab = {key: string; label: string; body: string};
 
@@ -181,7 +201,7 @@ export const PRODUCT_TABS: ProductTab[] = [
   {
     key: 'details',
     label: 'Details & fabric',
-    body: 'Sublimated poly knit, brushed on the inside face, with a ribbed crew neck, cuffs and hem. Sublimation puts the dye inside the fibre rather than on top of it, which is exactly why the six hues land on their specified values instead of drifting between batches — and why the colour can’t crack, peel or wash out. A cotton line follows once the same colour tolerances hold on it.',
+    body: 'Built on AS Colour’s 5160 blank — 80% cotton, 20% recycled polyester, 320 g/m² heavyweight fleece with a relaxed, drop-shouldered cut and ribbed crew neck, cuffs and hem. Heavy enough to hold its shape through a winter rather than going soft after a month.',
   },
   {
     key: 'fit',
@@ -191,12 +211,12 @@ export const PRODUCT_TABS: ProductTab[] = [
   {
     key: 'care',
     label: 'Care',
-    body: 'Cold machine wash inside out with like colours, mild detergent, no bleach or fabric softener. Line dry in shade or tumble dry low. Warm iron on the reverse only. Because the colour is dyed into the fibre there’s no print layer to protect — treated normally it holds its hue for the life of the garment.',
+    body: 'Cold machine wash inside out with like colours, mild detergent, no bleach or fabric softener. Line dry in shade or tumble dry low. Warm iron on the reverse, avoiding the embroidery. Heavyweight fleece takes a few washes to settle — that is the loft relaxing, not the garment wearing out.',
   },
   {
     key: 'ship',
     label: 'Shipping & production',
-    body: 'Made to order: nothing exists until you buy it. Production takes 2–5 business days, then 3–7 business days in transit within Australia — roughly 7–12 business days door to door. Pieces in one order may ship separately. Flat $9 shipping in Australia, free over $150, which a duo clears.',
+    body: 'Made to order: nothing exists until you buy it. Production takes 2–5 business days, then 3–7 business days in transit — roughly 7–12 business days door to door. Pieces in one order may ship separately. Shipping is a flat rate by destination and is calculated at checkout.',
   },
 ];
 
@@ -213,36 +233,42 @@ export const FAQS: Faq[] = [
   },
   {
     q: 'Why does it take two weeks?',
-    a: 'Nothing here is made until you order it. Rather than guess a season of sizes and colours into a warehouse, we’ve built the whole operation around made-to-order production: each piece is printed, cut and finished once your order lands. That’s 2–5 business days to make, then 3–7 in transit. The pipeline is genuinely new and we’re still tuning it, so expect those windows to tighten as we go. What the wait buys is no overproduction, no dead stock and no end-of-season clearance pile.',
+    a: 'Nothing here is made until you order it. Rather than guess a season of sizes and colours into a warehouse, we’ve built the whole operation around made-to-order production: each piece is finished once your order lands. That’s 2–5 business days to make, then 3–7 in transit. The pipeline is genuinely new and we’re still tuning it, so expect those windows to tighten as we go. What the wait buys is no overproduction, no dead stock and no end-of-season clearance pile.',
+  },
+  {
+    q: 'What currency will I be charged in?',
+    a: 'Yours, wherever we sell. Prices are set once and converted to your local currency automatically — the figure you see on the product page is the figure you pay, and checkout confirms it before you commit. Any duties or taxes for your destination are shown at checkout too, so there is nothing to work out afterwards.',
   },
   {
     q: 'Can I return a duo?',
     a: 'Duos are final sale. They’re two separately-sold pieces grouped at the cart rather than one bundled product, so there’s nothing to partially unwind if only one comes back. Kits are a single product and can be returned whole within 30 days. Since every piece is made to order we can’t resell a return, which is why the window sits on kits rather than on everything — the size guide is the thing to spend two minutes on before you order.',
   },
   {
-    q: 'What’s the fabric?',
-    a: 'The launch range is a sublimated poly knit — the route that gets the hues onto their exact specified values, since the dye becomes part of the fibre. It’s smooth-faced, brushed inside, and holds colour through washing far better than a printed cotton would. Cotton is planned for a later phase, not this one.',
+    q: 'Where does it ship from?',
+    a: 'Orders are produced at the fulfilment centre closest to you and shipped from there, which is why a parcel to the US does not travel from Europe to reach you. We are based in Spain and ship worldwide. Pieces made at different facilities may arrive in separate parcels, each with its own tracking.',
   },
   {
     q: 'Can I track my order?',
-    a: 'Yes. A tracking link is emailed when the parcel leaves the production facility — not when the label is generated, which is why the first email sometimes takes a few days longer than you’d expect from a stock-holding store. Pieces made on different machines may arrive in separate parcels.',
+    a: 'Yes. A tracking link is emailed when the parcel leaves the production facility — not when the label is generated, which is why the first email sometimes takes a few days longer than you’d expect from a stock-holding store.',
   },
 ];
 
-export type ShippingWindow = {region: string; window: string; intl?: boolean};
+export type ShippingWindow = {region: string; window: string; rate: string};
 
+/**
+ * Transit windows and the flat rates configured on the store's default delivery
+ * profile. Rates are quoted in EUR, the store's base currency, and converted at
+ * checkout like everything else.
+ */
 export const SHIPPING_WINDOWS: ShippingWindow[] = [
-  {region: 'Production', window: '2–5 business days'},
-  {region: 'Australia', window: '3–7 business days'},
-  {region: 'New Zealand', window: '5–10 business days', intl: true},
-  {region: 'UK / Europe', window: '7–14 business days', intl: true},
-  {region: 'United States', window: '6–12 business days', intl: true},
+  {region: 'Production', window: '2–5 business days', rate: '—'},
+  {region: 'Spain', window: '2–4 business days', rate: '€6.99'},
+  {region: 'European Union', window: '4–8 business days', rate: '€8.99'},
+  {region: 'Rest of world', window: '6–14 business days', rate: '€12.99'},
 ];
 
-export const SHIPPING_TOTAL = {
-  region: 'Typical total, AU',
-  window: '7–12 business days',
-};
+export const SHIPPING_NOTE =
+  'Rates are flat by destination and confirmed at checkout in your own currency, along with any duties or taxes for where it is going.';
 
 /**
  * The standing promises shown on the PDP and in the cart drawer.
@@ -261,7 +287,7 @@ export const ORDER_TERMS = [
   },
   {
     title: 'Secure checkout',
-    body: '— Shop Pay, Apple Pay, card. Australian-owned, GST included.',
-    short: 'Secure checkout · Shop Pay, Apple Pay, card.',
+    body: '— Shop Pay, Apple Pay, card. Priced in your local currency, with duties and taxes shown before you commit.',
+    short: 'Secure checkout · priced in your local currency.',
   },
 ];

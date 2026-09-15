@@ -3,7 +3,13 @@ import {Money} from '@shopify/hydrogen';
 import type {Route} from './+types/shop';
 import {HueBlock} from '~/components/HueBlock';
 import {DEFAULT_HUE, HUES} from '~/data/hues';
-import {HERO_PIECE, indicativePrice, PIECES} from '~/data/range';
+import {
+  baseTotal,
+  HERO_PIECE,
+  KIT_KEYS,
+  LIVE_HUES,
+  PIECES,
+} from '~/data/range';
 import {handleQuery, RANGE_PRICES_QUERY} from '~/lib/queries';
 
 export const meta: Route.MetaFunction = () => [
@@ -43,6 +49,15 @@ export default function Shop() {
     listed.find((product) => product.handle === handle)?.priceRange
       .minVariantPrice;
 
+  // A duo is the crewneck plus the cheapest piece it pairs with.
+  const duoFrom =
+    HERO_PIECE.basePrice +
+    Math.min(
+      ...PIECES.filter((piece) => piece.key !== HERO_PIECE.key).map(
+        (piece) => piece.basePrice,
+      ),
+    );
+
   return (
     <main>
       <section style={{padding: 'clamp(40px, 6vw, 92px) var(--gutter) clamp(24px, 3vw, 40px)'}}>
@@ -59,21 +74,39 @@ export default function Shop() {
 
       <section style={{padding: '0 var(--gutter) clamp(36px, 4vw, 56px)'}}>
         <div className="hue-grid">
-          {HUES.map((hue) => (
-            <Link
-              className="hue-card"
-              key={hue.code}
-              to={`${productPath}?Colour=${encodeURIComponent(hue.name)}`}
-              prefetch="intent"
-            >
-              <HueBlock hue={hue} frame caption="Full look" />
-              <p className="hue-card-name">{hue.name}</p>
-              <div className="hue-card-foot" style={{fontSize: 10.5, marginTop: 6}}>
-                <span className="hue-card-code">{hue.code}</span>
-                <span className="hue-card-code">Shop hue</span>
+          {HUES.map((hue) => {
+            const live = LIVE_HUES.includes(hue.name);
+            const body = (
+              <>
+                <HueBlock hue={hue} frame caption="Full look" />
+                <p className="hue-card-name">{hue.name}</p>
+                <div
+                  className="hue-card-foot"
+                  style={{fontSize: 10.5, marginTop: 6}}
+                >
+                  <span className="hue-card-code">{hue.code}</span>
+                  <span className="hue-card-code">
+                    {live ? 'Shop hue' : 'In production'}
+                  </span>
+                </div>
+              </>
+            );
+
+            return live ? (
+              <Link
+                className="hue-card"
+                key={hue.code}
+                to={`${productPath}?Color=${encodeURIComponent(hue.name)}`}
+                prefetch="intent"
+              >
+                {body}
+              </Link>
+            ) : (
+              <div className="hue-card is-upcoming" key={hue.code}>
+                {body}
               </div>
-            </Link>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -87,7 +120,7 @@ export default function Shop() {
             30-day return attached — if a kit isn&rsquo;t right, send it back
             whole.
           </p>
-          <span className="price">From ~$219 AUD</span>
+          <span className="price">From €{baseTotal(KIT_KEYS)}</span>
           <Link className="btn btn-solid" to={productPath} prefetch="intent">
             Build a kit
           </Link>
@@ -101,7 +134,7 @@ export default function Shop() {
             cart. Meant to slot into your wardrobe rather than replace it. Final
             sale, since they&rsquo;re sold as two separate pieces.
           </p>
-          <span className="price">From ~$148 AUD</span>
+          <span className="price">From €{duoFrom}</span>
           <Link className="btn btn-outline" to={productPath} prefetch="intent">
             Build a duo
           </Link>
@@ -112,7 +145,7 @@ export default function Shop() {
         <div className="section-head" style={{gap: '12px 32px', marginBottom: 22}}>
           <h2 className="h3">The pieces</h2>
           <span className="meta push-right" style={{fontSize: 10.5}}>
-            All six hues · ~ indicative price
+            Prices shown in your local currency
           </span>
         </div>
 
@@ -137,11 +170,9 @@ export default function Shop() {
                 </span>
                 <span className="fit">{piece.fit}</span>
                 <span className="price">
-                  {live ? <Money data={live} /> : `${indicativePrice(piece)} AUD`}
+                  {live ? <Money data={live} /> : `from €${piece.basePrice}`}
                 </span>
-                <span className="status">
-                  {live ? 'In stock' : piece.confirmed ? 'Confirmed' : 'Price TBC'}
-                </span>
+                <span className="status">{live ? 'Available' : 'Coming soon'}</span>
               </div>
             );
           })}

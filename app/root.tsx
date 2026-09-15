@@ -49,7 +49,7 @@ export const meta: Route.MetaFunction = () => [
   {
     name: 'description',
     content:
-      'Six earth tones matched to each other with real colour maths, made to order in Australia. Stay inside one hue family and the whole fit reads as monotone.',
+      'Six earth tones matched to each other with real colour maths, made to order and shipped worldwide. Stay inside one hue family and the whole fit reads as monotone.',
   },
 ];
 
@@ -79,7 +79,7 @@ export function Layout({children}: {children?: React.ReactNode}) {
   const nonce = useNonce();
 
   return (
-    <html lang="en-AU">
+    <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />

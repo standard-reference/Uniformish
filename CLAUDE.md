@@ -13,15 +13,18 @@ the full picture without re-explaining it.
 ## What this is
 
 A streetwear brand built around a colour system, not just a palette, sold from a
-custom Shopify Hydrogen storefront. Australian, priced in AUD, made to order.
+custom Shopify Hydrogen storefront. Based in Spain, selling worldwide, made to
+order — one EUR base price converted per buyer by Shopify Markets.
 
 **Positioning:** accessible premium. Above Uniqlo U's value tier, below Fear of
 God Essentials. The differentiator is the systemised, engineered identity — not
 the earth-tone aesthetic, which is a crowded lane on its own.
 
-**Brand name:** "Uniform-ish". Earlier working names were "Unit" and "Tones";
-both had existing apparel trademark conflicts. Uniform-ish has **not** been
-cleared in Class 25 — do that before anything public.
+**Brand name:** "Uniform-ish". The Shopify store is registered as *Uniformish*
+on `uniformish.store`, contact `hello@uniformish.store`. Earlier working names
+were "Unit" and "Tones"; both had existing apparel trademark conflicts.
+Uniform-ish has **not** been cleared in Class 25 — do that before anything
+public.
 
 ## The core rule
 
@@ -55,6 +58,13 @@ truth, not this table. Reproduced here for orientation only:
 | S-05 | Slate | `#5A6470` |
 | U-06 | Umber | `#5C4636` |
 
+**Only Jet, Moss and Slate are in production** (see `LIVE_HUES` in
+`app/data/range.ts`, derived from the crewneck's live colour option). The other
+three are designed but have no buyable blank yet, so the hue grids render them
+un-linked and marked "In production" rather than pointing at a variant that does
+not exist. When a hue goes live, its option value on the product is the only
+thing that needs to change.
+
 Design logic: all six sit on the same narrow band of lightness and chroma, held
 inside set OKLCh tolerances. That band is *why* any two read as chosen. **If a
 hue ever needs substituting, match it to the band — not to a hue on a colour
@@ -67,30 +77,38 @@ back to the Storefront swatch rather than breaking the page.
 
 ## The range
 
-`app/data/range.ts` holds the roadmap. Only the crewneck is confirmed; the rest
-carry indicative prices and render with a `~`.
+`app/data/range.ts` mirrors the live catalogue. Prices there are the **EUR base**
+— never render them as a buyer's price; buyers always see a Markets-converted
+figure from the Storefront API.
 
-| Piece | Fit | Price (AUD) | Status |
-|---|---|---|---|
-| Oversized Crewneck | Oversized | $89 | confirmed, launch piece |
-| Boxy Tee | Relaxed | ~$59 | price TBC |
-| Tapered Jogger | Lean | ~$99 | price TBC |
-| Mid Short | Lean | ~$79 | price TBC |
+| Piece | Fit | Base (EUR) | Handle | Colour option |
+|---|---|---|---|---|
+| Oversized Crewneck | Oversized | €62 | `uniform-ish-embroidered-crewneck-sweatshirt` | Jet / Moss / Slate |
+| Heavyweight Tee | Regular | €42 | `uniform-ish-embroidered-tee` | none |
+| Tapered Sweatpant | Lean | €64 | `uniform-ish-embroidered-sweatpants` | none |
+| Fleece Short | Relaxed | €54 | `uniform-ish-embroidered-shorts` | none |
+| Crew Sock | Cushioned | €46 | `uniform-ish-embroidered-socks` | Jet / Umber |
 
-Slip-ons and socks come later. The crewneck is the one deliberately oversized
-cut; everything else sits lean.
+Six older per-hue crewnecks (`jet-crewneck`, `moss-crewneck`, …) still exist in
+the admin as **drafts** with zero inventory. They are superseded by the single
+multi-variant crewneck above; don't wire anything to them.
 
-**Fabric:** sublimated poly knit. Sublimation puts dye inside the fibre, which
-is what lets six hues land on exact specified values instead of drifting between
-batches. A cotton line follows once the same tolerances hold on it.
+**Fabric:** heavyweight cotton blanks, **embroidered, not printed** — AS Colour
+5160 for the crewneck (80% cotton / 20% recycled polyester, 320 g/m²), Cotton
+Heritage MC1086 and M7580 for the tee and sweatpant, Independent Trading
+IND20SRT for the short, SOCCO SC200 for the sock. *An earlier version of the
+site described a sublimated poly knit whose dye "becomes part of the fibre".
+That was never true of these products and has been removed — don't reintroduce
+it.*
 
-**Fulfilment:** made to order through a print partner — 2–5 business days to
-make, 3–7 in transit. No warehouse, no dead stock.
+**Fulfilment:** Printful, made to order, produced at the facility nearest the
+delivery address. Four Printful delivery profiles carry per-product-type rates;
+the default profile is €6.99 Spain / €8.99 EU / €12.99 rest of world.
 
 **Returns:** kits return whole within 30 days. Duos are final sale (two
-separately-sold pieces, nothing to partially unwind). Faulty or misprinted
-pieces are replaced or refunded in full, always. *There is no free size-remake
-policy* — it was deliberately removed; don't reintroduce it.
+separately-sold pieces, nothing to partially unwind). Faulty pieces are replaced
+or refunded in full, always. *There is no free size-remake policy* — it was
+deliberately removed; don't reintroduce it.
 
 **No reviews anywhere on the site.** Also deliberate. No review module, no
 star ratings, no "be the first to review" placeholder.
@@ -106,6 +124,33 @@ Shopify is the backend of record — checkout, payments, tax, order routing.
 This app is the browsing UI in front of it, talking to the **Storefront API** and
 handing off to Shopify's hosted checkout.
 
+**The store:** `smsg1t-j1.myshopify.com` (Uniformish, Basic plan, based in Sant
+Cugat del Vallès, Spain).
+
+## Currency, and why nothing is hardcoded
+
+The store sells worldwide from **one EUR base price**. Shopify Markets converts
+per buyer: three markets (Spain primary, European Union, International), local
+currencies enabled on both non-primary markets, and **20 presentment currencies**
+active including USD, AUD, GBP and JPY.
+
+So there is no second price list and there must never be one. Do **not** add a
+USD column, a currency switcher that re-prices, or a hardcoded symbol next to a
+Storefront price. Instead:
+
+- `app/lib/i18n.ts` resolves the buyer's country per request from Oxygen's
+  `oxygen-buyer-country` header and hands it to `@inContext`. That single value
+  decides the currency the buyer is quoted.
+- Every price renders through Hydrogen's `<Money>`, which uses whatever the
+  Storefront API returned for that context.
+- The only hardcoded figures are `basePrice` in `app/data/range.ts` and the
+  shipping rates, both explicitly labelled EUR, used for "from" figures on the
+  Shop page and the shipping table.
+
+`MARKET_COUNTRIES` in `app/lib/i18n.ts` mirrors the markets' regions. If a market
+gains a region in the admin and that list isn't updated, buyers there silently
+fall back to the primary market's EUR.
+
 ## Layout
 
 ```
@@ -114,7 +159,7 @@ app/
     hues.ts      the six hues, their steps, and option-name matching
     range.ts     pieces, size chart, PDP tabs, FAQs, shipping windows, order terms
   components/    Header, Footer, PageLayout, Aside (overlays), cart, ProductForm…
-  lib/           Storefront queries, companion-variant matching, session, context
+  lib/           Storefront queries, buyer locale, variant matching, session
   routes/        file-based routes (React Router flat routes)
   styles/        reset.css + app.css — tokens first, then blocks
   assets/fonts/  self-hosted JetBrains Mono (latin + latin-ext subsets)
@@ -196,9 +241,18 @@ against a real storefront.
 
 ## Not done yet
 
-- **English only, no i18n.** `i18n` is pinned to `EN`/`AU` in
-  `app/lib/context.ts` and the app was scaffolded with `--markets none`.
-  Translations and any Shopify apps are a deliberate later step.
+- **Not connected to the live store yet.** Two steps, both admin-only:
+  1. Create a Storefront API access token (Settings → Apps and sales channels →
+     Develop apps) and put it in `.env` as `PUBLIC_STOREFRONT_API_TOKEN`.
+     Creating tokens is deliberately blocked to AI tools, so this is a human
+     step.
+  2. Publish the five products to that app's sales channel. They are currently
+     published to Online Store / Shop / POS only (`onlineStoreUrl` is null), so
+     the Storefront API returns nothing for them until this is done.
+  Until both are done, `npm run dev` runs against mock.shop.
+- **English only.** Language is pinned to `EN` in `app/lib/i18n.ts` (country is
+  not pinned — see above). Translations and any Shopify apps are a deliberate
+  later step.
 - **Photography.** Every image is a labelled colour block. Real shots want the
   same crop and lighting per hue.
 - **Newsletter signup** in the footer is not wired to a list provider. It is

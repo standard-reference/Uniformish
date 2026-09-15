@@ -101,11 +101,12 @@ export default function About() {
             end-of-season pile to discount or bin.
           </p>
           <p className="body-copy">
-            It also happens to be how the colours hit spec: the launch range is
-            sublimated poly, where the dye becomes part of the fibre — which is
-            what lets six hues land on their exact specified values instead of
-            drifting batch to batch. A cotton line comes later, once the colour
-            tolerances are proven on it.
+            The launch range is built on heavyweight cotton blanks — AS Colour
+            and Cotton Heritage bodies, embroidered rather than printed, so the
+            mark is thread in the fabric rather than a layer sitting on top of
+            it. The constraint that comes with it is honest: a hue ships when a
+            blank exists in it and lands inside our tolerances, which is why the
+            crewneck leads with three of the six rather than all of them.
           </p>
           <p className="body-copy">
             The trade-off is real and worth stating: you wait about two weeks
@@ -132,9 +133,10 @@ export default function About() {
             Every hue in the range is held inside set OKLCh tolerances for
             lightness, chroma and hue angle, so &ldquo;these go together&rdquo; is
             something we can check rather than something you have to take our word
-            for. Kits come back whole within 30 days if the look isn&rsquo;t what
-            you pictured, and faulty or misprinted pieces are replaced or refunded
-            in full, always.
+            for — and a blank that misses the band doesn&rsquo;t ship, which is
+            the whole reason the range grows slowly. Kits come back whole within
+            30 days if the look isn&rsquo;t what you pictured, and faulty pieces
+            are replaced or refunded in full, always.
           </p>
           <Link className="link-rule" to="/shipping-and-faq" prefetch="intent">
             Read the policy in full

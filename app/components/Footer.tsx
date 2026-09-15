@@ -11,7 +11,7 @@ export function Footer() {
           <span className="footer-wordmark">Uniform-ish</span>
           <p className="footer-blurb">
             One hue, head to toe. Six matched earth tones, made to order,
-            shipped from Australia.
+            shipped worldwide.
           </p>
         </div>
 
@@ -39,7 +39,7 @@ export function Footer() {
           <Link to="/about" prefetch="intent">
             About
           </Link>
-          <a href="mailto:hello@uniform-ish.com">hello@uniform-ish.com</a>
+          <a href="mailto:hello@uniformish.store">hello@uniformish.store</a>
         </div>
 
         <div className="footer-col">

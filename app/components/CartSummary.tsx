@@ -48,7 +48,7 @@ export function CartSummary({
         </div>
 
         <p className="tax-note">
-          Shipping calculated at checkout · GST included
+          Shipping, duties and taxes calculated at checkout
         </p>
 
         {needsPair ? (

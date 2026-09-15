@@ -1,7 +1,7 @@
 import {Link} from 'react-router';
 import type {Route} from './+types/shipping-and-faq';
 import {Accordion} from '~/components/Accordion';
-import {FAQS, SHIPPING_TOTAL, SHIPPING_WINDOWS} from '~/data/range';
+import {FAQS, SHIPPING_NOTE, SHIPPING_WINDOWS} from '~/data/range';
 
 export const meta: Route.MetaFunction = () => [
   {title: 'Shipping, returns & FAQ — Uniform-ish'},
@@ -33,22 +33,25 @@ export default function ShippingAndFaq() {
           <h2 className="h3">Two windows, added together</h2>
 
           <div className="window-table">
+            <div className="window-row" style={{background: 'var(--ink)', color: 'var(--ink-inverse)'}}>
+              <span>Destination</span>
+              <span style={{color: 'inherit'}}>Transit</span>
+              <span style={{color: 'inherit'}}>Rate</span>
+            </div>
             {SHIPPING_WINDOWS.map((row) => (
               <div className="window-row" key={row.region}>
                 <span>{row.region}</span>
                 <span>{row.window}</span>
+                <span>{row.rate}</span>
               </div>
             ))}
-            <div className="window-row total">
-              <span>{SHIPPING_TOTAL.region}</span>
-              <span>{SHIPPING_TOTAL.window}</span>
-            </div>
           </div>
 
           <p className="body-copy" style={{fontSize: 16}}>
-            Flat $9 shipping within Australia, free over $150 — which a duo or kit
-            clears. Pieces in one order may arrive in separate parcels if
-            they&rsquo;re made on different machines; tracking covers each one.
+            {SHIPPING_NOTE} Orders are produced at the facility closest to the
+            delivery address, so a parcel does not cross the world to reach you.
+            Pieces made at different facilities may arrive separately, each with
+            its own tracking.
           </p>
         </div>
 

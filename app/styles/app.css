@@ -560,6 +560,15 @@ a:hover {
   inset: 15% 19%;
 }
 
+/* A hue that is designed but not yet made in a buyable blank. */
+.hue-card.is-upcoming {
+  cursor: default;
+}
+
+.hue-card.is-upcoming .hue-block {
+  opacity: 0.55;
+}
+
 .hue-card-foot {
   display: flex;
   align-items: baseline;
@@ -1408,8 +1417,8 @@ a:hover {
 }
 
 .window-row {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1.2fr 1.4fr 0.6fr;
   gap: 12px;
   padding: 13px 15px;
   border-bottom: 1px solid var(--rule-soft);
@@ -1417,11 +1426,15 @@ a:hover {
   font-size: 12px;
 }
 
+.window-row span:last-child {
+  text-align: right;
+}
+
 .window-row:last-child {
   border-bottom: 0;
 }
 
-.window-row span:last-child {
+.window-row span:not(:first-child) {
   color: var(--ink-soft);
 }
 

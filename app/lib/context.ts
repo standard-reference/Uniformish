@@ -1,6 +1,7 @@
 import {createHydrogenContext} from '@shopify/hydrogen';
 import {AppSession} from '~/lib/session';
 import {CART_QUERY_FRAGMENT} from '~/lib/fragments';
+import {getLocaleFromRequest} from '~/lib/i18n';
 import type {CartApiQueryFragment} from 'storefrontapi.generated';
 
 // Define the additional context object
@@ -51,8 +52,9 @@ export async function createHydrogenRouterContext(
       cache,
       waitUntil,
       session,
-      // Or detect from URL path based on locale subpath, cookies, or any other strategy
-      i18n: {language: 'EN', country: 'AU'},
+      // Resolved per request from the buyer's country so Shopify Markets
+      // quotes each visitor in their own currency. See app/lib/i18n.ts.
+      i18n: getLocaleFromRequest(request),
       cart: {
         queryFragment: CART_QUERY_FRAGMENT,
       },

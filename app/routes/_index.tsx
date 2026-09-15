@@ -5,7 +5,7 @@ import type {Route} from './+types/_index';
 import {HueBlock} from '~/components/HueBlock';
 import {SizeChartPreview, SizeChartTrigger} from '~/components/SizeChart';
 import {DEFAULT_HUE, HUES} from '~/data/hues';
-import {HERO_PIECE, indicativePrice} from '~/data/range';
+import {HERO_PIECE, LIVE_HUES} from '~/data/range';
 import {HERO_PRODUCT_QUERY} from '~/lib/queries';
 
 export const meta: Route.MetaFunction = () => [
@@ -51,7 +51,8 @@ export default function Home() {
               Shop the Crewneck
             </Link>
             <span className="meta" style={{letterSpacing: '0.06em'}}>
-              {price ? <Money data={price} /> : indicativePrice(HERO_PIECE)} · XS–3XL
+              {price ? <Money data={price} /> : `from €${HERO_PIECE.basePrice}`} ·
+              S–3XL
             </span>
           </div>
         </div>
@@ -82,8 +83,8 @@ export default function Home() {
         <div className="fact">
           <span className="eyebrow-sm">03 / Colour</span>
           <p>
-            Sublimated poly knit, every hue matched to every other in OKLCh — not
-            by eye.
+            Heavyweight cotton blanks, every hue matched to every other in OKLCh
+            — not by eye.
           </p>
         </div>
       </section>
@@ -103,25 +104,41 @@ export default function Home() {
           </div>
           <span className="meta push-right">
             Crewneck ·{' '}
-            {price ? <Money data={price} /> : indicativePrice(HERO_PIECE)}
+            {price ? <Money data={price} /> : `from €${HERO_PIECE.basePrice}`}
           </span>
         </div>
 
         <div className="hue-grid">
-          {HUES.map((hue) => (
-            <Link
-              className="hue-card"
-              key={hue.code}
-              to={`${productPath}?Colour=${encodeURIComponent(hue.name)}`}
-              prefetch="intent"
-            >
-              <HueBlock hue={hue} frame caption="Flat-lay" />
+          {HUES.map((hue) => {
+            const live = LIVE_HUES.includes(hue.name);
+            const foot = (
               <div className="hue-card-foot">
                 <span>{hue.name}</span>
-                <span className="hue-card-code">{hue.code}</span>
+                <span className="hue-card-code">
+                  {live ? hue.code : 'In production'}
+                </span>
               </div>
-            </Link>
-          ))}
+            );
+
+            // A hue the crewneck isn't made in yet is shown but not linked —
+            // the colour system is six, the catalogue is not yet.
+            return live ? (
+              <Link
+                className="hue-card"
+                key={hue.code}
+                to={`${productPath}?Color=${encodeURIComponent(hue.name)}`}
+                prefetch="intent"
+              >
+                <HueBlock hue={hue} frame caption="Flat-lay" />
+                {foot}
+              </Link>
+            ) : (
+              <div className="hue-card is-upcoming" key={hue.code}>
+                <HueBlock hue={hue} frame caption="Flat-lay" />
+                {foot}
+              </div>
+            );
+          })}
         </div>
 
         <div style={{display: 'flex', justifyContent: 'center', marginTop: 'clamp(28px, 4vw, 48px)'}}>
