@@ -67,6 +67,7 @@ export default function Home() {
       </section>
 
       {/* ─────────── Three standing facts ─────────── */}
+      <h2 className="sr-only">Colour-matched streetwear, made to order</h2>
       <section className="facts">
         <div className="fact">
           <span className="eyebrow-sm">01 / Production</span>
@@ -100,8 +101,8 @@ export default function Home() {
             <p className="lede" style={{fontSize: 16.5}}>
               Not &ldquo;available in six colours&rdquo; — six hues sitting on the
               same lightness and chroma band, so a Clay top over an Umber bottom
-              reads as deliberate instead of accidental. Pick the hue you want to
-              live in.
+              reads as deliberate instead of accidental. Any two pieces make a
+              matching set; pick the hue you want to live in.
             </p>
           </div>
           <span className="meta push-right">
@@ -138,6 +139,10 @@ export default function Home() {
         <div className="section-head-copy">
           <span className="eyebrow">How a colourway wears</span>
           <h2 className="h2">Two ways to wear one hue. Both on purpose.</h2>
+          <p className="lede" style={{fontSize: 16.5, maxWidth: '58ch'}}>
+            Two monochrome outfit ideas that aren&rsquo;t the same idea twice —
+            one exact, one stepped.
+          </p>
         </div>
 
         <div className="looks">

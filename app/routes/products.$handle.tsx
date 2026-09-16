@@ -11,6 +11,7 @@ import {
 import type {Route} from './+types/products.$handle';
 import {Accordion} from '~/components/Accordion';
 import {HueBlock} from '~/components/HueBlock';
+import {ProductGallery} from '~/components/ProductGallery';
 import {ProductForm} from '~/components/ProductForm';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {COMPANION_PRODUCTS_QUERY, handleQuery} from '~/lib/queries';
@@ -36,7 +37,8 @@ export const meta: Route.MetaFunction = ({data}) => {
   }
 
   return seoMeta({
-    title: product.seo?.title ?? product.title,
+    // The keyword map's pattern. A seo.title set in the admin still wins.
+    title: product.seo?.title ?? `${product.title} — Six Colour-Matched Tones`,
     description:
       product.seo?.description ?? product.description?.slice(0, 160) ?? '',
     // Canonical is the bare product path: variant query params are the same
@@ -120,18 +122,14 @@ export default function Product() {
   return (
     <main>
       <section className="pdp">
-        <div className="pdp-media">
-          <HueBlock
-            className="pdp-media-main"
-            hue={hue}
-            caption={`Flat-lay · ${hueLabel} · front`}
-            image={selectedVariant?.image ?? undefined}
-          />
-          <div className="pdp-media-pair">
-            <HueBlock hue={hue} caption="Knit detail" />
-            <HueBlock hue={hue} caption="Full look · size L" />
-          </div>
-        </div>
+        <ProductGallery
+          key={selectedVariant?.id}
+          images={product.images.nodes}
+          variantImage={selectedVariant?.image}
+          title={product.title}
+          colour={colour}
+          hue={hue}
+        />
 
         <div className="pdp-main">
           <div className="field" style={{gap: 12}}>
@@ -275,6 +273,15 @@ const PRODUCT_FRAGMENT = `#graphql
     description
     encodedVariantExistence
     encodedVariantAvailability
+    images(first: 20) {
+      nodes {
+        id
+        url
+        altText
+        width
+        height
+      }
+    }
     options {
       name
       optionValues {

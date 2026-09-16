@@ -17,10 +17,8 @@ const graphqlConfig: IGraphQLConfig = {
       ],
     },
 
-    customer: {
-      schema: getSchema('customer-account'),
-      documents: ['./app/graphql/customer-account/*.{ts,tsx,js,jsx}'],
-    },
+    // The Customer Account API project was removed with the /account routes:
+    // this storefront is guest checkout only.
 
     // Add your own GraphQL projects here for CMS, Shopify Admin API, etc.
   },

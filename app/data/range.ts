@@ -220,7 +220,7 @@ export type Faq = {q: string; a: string};
 export const FAQS: Faq[] = [
   {
     q: 'Why do I have to buy two pieces?',
-    a: 'Because one piece on its own can’t do what the brand is for. The whole idea is a single hue head to toe, which needs at least two pieces to exist — so orders come as a duo or a three-piece kit. It’s a styling rule, not a checkout trick, and it stops at the register: nothing polices what you actually wear afterwards.',
+    a: 'Because one piece on its own can’t do what the brand is for. The whole idea is a single hue head to toe, which needs at least two pieces to exist — so orders come as a duo or a three-piece kit. That is our minimum order requirement, and unlike most clothing brands’ it exists for a styling reason rather than a shipping-cost one — it’s a rule about how the range works, not a checkout trick. It also stops at the register: nothing polices what you actually wear afterwards.',
   },
   {
     q: 'What’s the difference between the colour options?',

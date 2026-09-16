@@ -55,12 +55,11 @@ export const meta: Route.MetaFunction = () =>
   });
 
 export async function loader(args: Route.LoaderArgs) {
-  const {storefront, env, customerAccount, cart} = args.context;
+  const {storefront, env, cart} = args.context;
 
   return {
     // Deferred — the cart resolves after first byte.
     cart: cart.get(),
-    isLoggedIn: customerAccount.isLoggedIn(),
     publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
     shop: getShopAnalytics({
       storefront,

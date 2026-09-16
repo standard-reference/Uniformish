@@ -229,13 +229,34 @@ oversized" live on the product page that they are true of, and nowhere else.
 | `/shipping-and-faq` | Shipping, returns & FAQ |
 | `/cart` | Cart as a page (the drawer is the primary surface) |
 
-Plus the scaffold's `/collections/*`, `/search`, `/policies/*`, `/account/*`,
-`robots.txt` and `sitemap.xml`.
+Plus the scaffold's `/collections/*`, `/search`, `/policies/*`, `robots.txt`
+and `sitemap.xml`.
+
+**Guest checkout only — there are no accounts.** The `/account` routes, the
+Customer Account API queries and its codegen project were removed, not deferred.
+Don't scaffold them back in without that decision changing.
 
 Header nav is **fixed in `app/components/Header.tsx`**, not driven by a Shopify
 menu — these destinations are the brand's structure, and shouldn't change
 because someone reorders a menu in the admin. Note the nav has **no crewneck
 entry**; the product is reached from Shop, the hue grid and the hero.
+
+## SEO
+
+Per-page targets come from the marketing spec's keyword map. The placement rule:
+one deliberate mention of a page's primary target in the title tag, the H1 or
+first H2, and the opening ~100 words — then let related terms occur naturally
+from writing about the real mechanism. No page needs the phrase more than twice.
+
+`app/lib/seo.ts` owns titles, canonicals and social cards; a route sets its own
+by calling `seoMeta()`. The home H1 stays "One hue, head to toe" and carries no
+keyword on purpose — the target sits in the meta description and a screen-reader
+H2 beneath the hero instead of bending a good headline around a phrase.
+
+Product images: Printful writes `Product mockup` as the alt on everything it
+syncs. `ProductGallery` treats that exact string as missing and generates
+`[title] in [hue]`, per the keyword map. A real alt set in the admin always
+wins — fix it there and the generated one steps aside.
 
 ## Products and the pairing UI
 

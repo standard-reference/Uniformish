@@ -9,7 +9,7 @@ export const meta: Route.MetaFunction = () =>
   seoMeta({
     title: 'About',
     description:
-      'One hue, head to toe. Why the colour system came before the clothes, and why every order is at least two pieces.',
+      'One hue, head to toe. Why the colour system came before the clothes, why everything is made to order, and why every order is at least two pieces.',
     path: '/about',
   });
 
@@ -34,7 +34,9 @@ export default function About() {
           Stay inside a single hue family across everything you&rsquo;re wearing
           and the whole fit reads as monotone — exact match or stepped lighter
           toward the feet, both work. That rule is the product. The garments are
-          just how you apply it.
+          just how you apply it, and every one of them is made to order: a small
+          batch of exactly what was bought, nothing held in a warehouse on a
+          guess.
         </p>
       </section>
 

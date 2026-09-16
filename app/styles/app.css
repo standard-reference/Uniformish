@@ -1004,17 +1004,60 @@ a:hover {
 
 .pdp-media-main {
   aspect-ratio: 4 / 5;
+  background: var(--panel);
+  overflow: hidden;
 }
 
-.pdp-media-pair {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+.pdp-media-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Thumbnail strip. Scrolls sideways on narrow screens rather than wrapping
+   into a second row that pushes the buy box off the fold. */
+.pdp-thumbs {
+  display: flex;
   gap: 1px;
+  overflow-x: auto;
+  background: var(--rule);
+  scrollbar-width: thin;
 }
 
-.pdp-media-pair .hue-block {
+.pdp-thumbs li {
+  flex: 0 0 auto;
+}
+
+.pdp-thumb {
+  display: block;
+  width: 84px;
+  padding: 0;
+  cursor: pointer;
+  background: var(--paper);
+  border: 0;
+  opacity: 0.55;
+  transition: opacity 0.15s ease;
+}
+
+.pdp-thumb img {
+  width: 100%;
+  height: auto;
+  display: block;
   aspect-ratio: 1 / 1;
-  padding: 14px;
+  object-fit: cover;
+}
+
+.pdp-thumb:hover,
+.pdp-thumb:focus-visible {
+  opacity: 1;
+}
+
+/* The image currently in the main frame. */
+.pdp-thumb[aria-current='true'] {
+  opacity: 1;
+  outline: 1px solid var(--ink);
+  outline-offset: -1px;
 }
 
 .pdp-main {

@@ -9,9 +9,9 @@ import {seoMeta} from '~/lib/seo';
 
 export const meta: Route.MetaFunction = () =>
   seoMeta({
-    title: 'Shop',
+    title: 'Shop the Range — Colour-Matched Basics, Made to Order',
     description:
-      'Start with a hue, not a garment. Six matched earth tones across the range, sold as duos and three-piece kits.',
+      'Every piece here is built to be worn together: six colour-matched earth tones across tees, crewnecks, sweatpants, shorts and socks. Made to order, sold as duos and three-piece kits.',
     path: '/shop',
   });
 
@@ -60,9 +60,10 @@ export default function Shop() {
           Start with a hue, not a garment
         </h1>
         <p className="lede" style={{margin: '18px 0 0', maxWidth: '54ch'}}>
-          Everything in the range is matched to everything else, so the decision
-          that matters is which hue you want to live in. Pieces come in twos and
-          threes — we don&rsquo;t sell orphans.
+          Everything here is built to be worn together, so the decision that
+          matters is which hue you want to live in — any two pieces in one of
+          them already make a matching set. Pieces come in twos and threes; we
+          don&rsquo;t sell orphans.
         </p>
       </section>
 

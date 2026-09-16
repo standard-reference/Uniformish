@@ -7,9 +7,9 @@ import {seoMeta} from '~/lib/seo';
 
 export const meta: Route.MetaFunction = () =>
   seoMeta({
-    title: 'Size & fit guide',
+    title: `${HERO_PIECE.name} Size Guide — How Uniform-ish Fits`,
     description:
-      'How to measure, and the garment-flat measurements behind every size, in centimetres and inches.',
+      'The crewneck runs oversized: size down for a closer fit, true to size for the full relaxed look. Garment-flat measurements in centimetres and inches, plus how to measure.',
     path: '/size-and-fit',
   });
 
@@ -27,9 +27,10 @@ export default function SizeAndFit() {
           Every number is the garment, not you
         </h1>
         <p className="lede" style={{margin: '20px 0 0', maxWidth: '54ch'}}>
-          These are garment measurements taken flat, not body measurements.
-          Compare them to a sweatshirt you already own and like — it&rsquo;s the
-          most reliable way to get this right first time.
+          The crewneck runs oversized — size down for a closer fit, or take your
+          usual size for the full relaxed look. Every number below is the garment
+          measured flat, not a body measurement, so compare them against
+          something you already own and like the fit of.
         </p>
       </section>
 
