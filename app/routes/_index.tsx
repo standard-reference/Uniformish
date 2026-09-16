@@ -13,7 +13,7 @@ export const meta: Route.MetaFunction = () =>
   seoMeta({
     title: 'Uniform-ish — One hue, head to toe',
     description:
-      'Six earth tones matched to each other with real colour maths, made to order and shipped worldwide. Starting with an oversized crewneck.',
+      'Six earth tones matched to each other with real colour maths, made to order and shipped worldwide. Tees, crewnecks, sweatpants, shorts and socks, all built to be worn together.',
     path: '/',
   });
 
@@ -106,8 +106,7 @@ export default function Home() {
             </p>
           </div>
           <span className="meta push-right">
-            Crewneck ·{' '}
-            {price ? <Money data={price} /> : `from €${HERO_PIECE.basePrice}`}
+            From {price ? <Money data={price} /> : `€${HERO_PIECE.basePrice}`}
           </span>
         </div>
 
@@ -233,12 +232,13 @@ export default function Home() {
         <div className="stack">
           <span className="eyebrow">Size &amp; fit</span>
           <h2 className="h2" style={{fontSize: 'clamp(26px, 3vw, 40px)'}}>
-            The crewneck runs oversized. That&rsquo;s the one exception.
+            Every number is the garment, not you.
           </h2>
           <p className="lede" style={{maxWidth: '46ch'}}>
-            The rest of the range sits leaner — elevated basics. The crewneck is
-            deliberately boxy: take your usual size for the full look, or size
-            down for something closer. Every number is garment-flat, not body.
+            Measurements are taken flat off the piece itself, so you can hold
+            them against something already in your wardrobe instead of guessing
+            from a body chart. Where a cut runs generous or lean, its own
+            product page says so.
           </p>
           <div className="row-actions" style={{gap: '12px 20px', marginTop: 4}}>
             <SizeChartTrigger className="btn btn-outline btn-sm">

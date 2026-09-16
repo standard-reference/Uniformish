@@ -1,5 +1,4 @@
 import {Link} from 'react-router';
-import {HERO_PIECE} from '~/data/range';
 import {CONTACT_EMAIL} from '~/lib/seo';
 import {Logo} from '~/components/Logo';
 
@@ -20,8 +19,8 @@ export function Footer() {
 
         <div className="footer-col">
           <span className="footer-head">Shop</span>
-          <Link to={`/products/${HERO_PIECE.handle}`} prefetch="intent">
-            The Oversized Crewneck
+          <Link to="/shop" prefetch="intent">
+            All pieces
           </Link>
           <Link to="/shop" prefetch="intent">
             Kits &amp; duos

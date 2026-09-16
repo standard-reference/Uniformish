@@ -902,6 +902,33 @@ a:hover {
   color: var(--ink-body);
 }
 
+/* Shopify's own product description, rendered above the shared tabs. */
+.product-description {
+  font-size: 15.5px;
+  line-height: 1.64;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+.product-description > * + * {
+  margin-top: 0.9em;
+}
+
+.product-description ul,
+.product-description ol {
+  padding-left: 1.1em;
+  list-style: disc;
+}
+
+.product-description li {
+  margin-top: 0.35em;
+}
+
+.product-description strong {
+  color: var(--ink-body);
+  font-weight: 500;
+}
+
 /* ─────────── Accordion (PDP tabs, FAQ) ─────────── */
 
 .accordion {

@@ -107,9 +107,12 @@ export type SizeRow = {
 };
 
 /**
- * Oversized crewneck, measured flat, centimetres with inch equivalents.
- * Tolerance ±2cm. Still provisional — to be confirmed against the AS Colour
- * 5160 spec sheet the live product is built on.
+ * Measurements, taken flat, in centimetres with inch equivalents. Tolerance
+ * ±2cm, and still provisional against the blank's spec sheet.
+ *
+ * Only the crewneck's chart is published so far. `SIZE_CHART_PIECE` says which
+ * piece these belong to, and `hasSizeChart` gates the size-guide link so a
+ * product without measurements doesn't quietly show another product's.
  */
 export const SIZE_CHART: SizeRow[] = [
   {
@@ -173,36 +176,42 @@ export const SIZE_CHART_PREVIEW = SIZE_CHART.filter((row) =>
   ['S', 'M', 'L', 'XL'].includes(row.size),
 );
 
+/** The piece SIZE_CHART describes. */
+export const SIZE_CHART_PIECE = 'crew';
+
+/** True when this product has its own published measurements. */
+export function hasSizeChart(handle: string): boolean {
+  return getPiece(SIZE_CHART_PIECE)?.handle === handle;
+}
+
 export const SIZE_CHART_FOOTNOTE =
   'Centimetres / inches · measured flat · ±2cm · provisional against the blank spec';
 
 export type ProductTab = {key: string; label: string; body: string};
 
 /**
- * PDP accordion copy for the crewneck. Lives here rather than in the Shopify
- * description because it is the same voice across the site and gets edited as
- * copy, not as merchandising.
+ * PDP accordion copy that is true of every piece in the range.
+ *
+ * Anything specific to one product — its blank, its fabric weight, how it is
+ * cut — belongs in that product's Shopify description, which the PDP renders
+ * above these. Putting it here would show the crewneck's fit notes on the
+ * tee, which is exactly the bug this split exists to prevent.
  */
 export const PRODUCT_TABS: ProductTab[] = [
   {
-    key: 'details',
-    label: 'Details & fabric',
-    body: 'Built on AS Colour’s 5160 blank — 80% cotton, 20% recycled polyester, 320 g/m² heavyweight fleece with a relaxed, drop-shouldered cut and ribbed crew neck, cuffs and hem. Heavy enough to hold its shape through a winter rather than going soft after a month.',
-  },
-  {
-    key: 'fit',
-    label: 'Fit notes',
-    body: 'Oversized and boxy through the body with a dropped shoulder, and a slightly shorter, wider line than a classic crew. It’s the one deliberately generous cut in a range that otherwise sits lean. Take your usual size for the full relaxed look; size down for something closer to regular fit while keeping the shoulder drop. Model is 183cm / 6′0″ wearing a size L.',
-  },
-  {
     key: 'care',
     label: 'Care',
-    body: 'Cold machine wash inside out with like colours, mild detergent, no bleach or fabric softener. Line dry in shade or tumble dry low. Warm iron on the reverse, avoiding the embroidery. Heavyweight fleece takes a few washes to settle — that is the loft relaxing, not the garment wearing out.',
+    body: 'Cold machine wash inside out with like colours, mild detergent, no bleach or fabric softener. Line dry in shade or tumble dry low. Warm iron on the reverse, avoiding any embroidery. Heavyweight cotton takes a few washes to settle — that is the loft relaxing, not the garment wearing out.',
   },
   {
     key: 'ship',
     label: 'Shipping & production',
-    body: 'Made to order: nothing exists until you buy it. Production takes 2–5 business days, then 3–6 business days in transit within the EU and 7–15 further afield. Pieces in one order may ship separately. Shipping is a flat rate by destination and is calculated at checkout.',
+    body: 'Made to order: nothing exists until you buy it. Production takes 2\u20135 business days, then 3\u20136 business days in transit within the EU and 7\u201315 further afield. Pieces in one order may ship separately. Shipping is a flat rate by destination and is calculated at checkout.',
+  },
+  {
+    key: 'returns',
+    label: 'Returns',
+    body: 'Keep what works, send back what doesn\u2019t. Every piece is refunded individually, so a duo or a kit is never all-or-nothing. 14 days to change your mind in the EU and UK, 30 days elsewhere. Return postage is yours on a change of mind; anything faulty or wrong is ours, both ways.',
   },
 ];
 

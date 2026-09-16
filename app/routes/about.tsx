@@ -85,10 +85,9 @@ export default function About() {
             first and the clothes second.
           </p>
           <p className="body-copy">
-            The crewneck is the deliberate exception to the rest of the fit
-            language: oversized and boxy where everything else sits lean.
-            It&rsquo;s the piece people try first, so it may as well be the
-            generous one.
+            The fits aren&rsquo;t uniform and aren&rsquo;t meant to be — some
+            pieces sit generous, some sit lean. What holds across all of them is
+            the colour, which is the part that has to match.
           </p>
         </div>
 
@@ -105,8 +104,8 @@ export default function About() {
             and Cotton Heritage bodies, embroidered rather than printed, so the
             mark is thread in the fabric rather than a layer sitting on top of
             it. The constraint that comes with it is honest: a hue ships when a
-            blank exists in it and lands inside our tolerances, which is why the
-            crewneck leads with three of the six rather than all of them.
+            blank exists in it and lands inside our tolerances, which is why
+            the range grows a hue at a time rather than all six at once.
           </p>
           <p className="body-copy">
             The trade-off is real and worth stating: you wait about two weeks

@@ -23,11 +23,14 @@ export function ProductForm({
   productOptions,
   selectedVariant,
   companions,
+  showSizeGuide = false,
 }: {
   productOptions: MappedProductOptions[];
   selectedVariant: SelectedVariant;
   /** Companion products that actually exist in the connected storefront. */
   companions: CompanionProductFragment[];
+  /** Only true where this product has its own published measurements. */
+  showSizeGuide?: boolean;
 }) {
   const navigate = useNavigate();
   const {open} = useAside();
@@ -124,7 +127,7 @@ export function ProductForm({
         <div className="field">
           <div className="field-head">
             <span className="eyebrow-sm">Size</span>
-            <SizeChartTrigger />
+            {showSizeGuide ? <SizeChartTrigger /> : null}
           </div>
           <div className="size-row" role="group" aria-label="Size">
             {sizeOption.optionValues.map((value) => (
@@ -142,7 +145,6 @@ export function ProductForm({
               </button>
             ))}
           </div>
-          <p className="note">Runs oversized — size down for a closer fit.</p>
         </div>
       ) : null}
 
@@ -233,7 +235,7 @@ function PairingPanel({
       <div className="stack" style={{gap: 6}}>
         <span className="eyebrow-sm">Pairs with{colour ? ` — ${colour}` : ''}</span>
         <p>
-          The crewneck ships as part of a look, so pick what it goes with.{' '}
+          This ships as part of a look, so pick what it goes with.{' '}
           {MIN_PIECES_PER_ORDER} pieces minimum in one hue — that&rsquo;s the
           rule the whole range is built on.
         </p>

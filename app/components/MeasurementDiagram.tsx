@@ -1,5 +1,5 @@
 /**
- * Flat-lay schematic of the oversized crewneck with the three measurements
+ * Flat-lay schematic of a top with the three measurements
  * marked, matching the A/B/C steps beside it on the size guide.
  *
  * Inline SVG rather than an image: it inherits the page's colour tokens, stays
@@ -18,10 +18,10 @@ export function MeasurementDiagram() {
       aria-labelledby="measure-diagram-title measure-diagram-desc"
     >
       <title id="measure-diagram-title">
-        Where to measure an oversized crewneck, laid flat
+        Where to measure a garment, laid flat
       </title>
       <desc id="measure-diagram-desc">
-        A crewneck sweatshirt seen flat from the front. Line A runs straight
+        A long-sleeved top seen flat from the front. Line A runs straight
         across the body two centimetres below the armhole seam for the half
         chest. Line B runs down the right-hand side from the highest point of
         the shoulder to the hem for the body length. Line C follows the centre

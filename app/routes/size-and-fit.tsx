@@ -9,7 +9,7 @@ export const meta: Route.MetaFunction = () =>
   seoMeta({
     title: 'Size & fit guide',
     description:
-      'Garment-flat measurements for the oversized crewneck, in centimetres and inches, with how to measure and which size to take.',
+      'How to measure, and the garment-flat measurements behind every size, in centimetres and inches.',
     path: '/size-and-fit',
   });
 
@@ -24,7 +24,7 @@ export default function SizeAndFit() {
       >
         <span className="eyebrow">Size &amp; fit guide</span>
         <h1 className="h1" style={{margin: '16px 0 0', maxWidth: '24ch'}}>
-          Oversized crewneck measurements
+          Every number is the garment, not you
         </h1>
         <p className="lede" style={{margin: '20px 0 0', maxWidth: '54ch'}}>
           These are garment measurements taken flat, not body measurements.
@@ -34,6 +34,12 @@ export default function SizeAndFit() {
       </section>
 
       <section style={{padding: '0 var(--gutter) clamp(40px, 5vw, 72px)'}}>
+        <div className="section-head" style={{marginBottom: 16}}>
+          <span className="eyebrow-sm">{HERO_PIECE.name}</span>
+          <span className="meta push-right" style={{fontSize: 10.5}}>
+            Charts for the rest of the range follow
+          </span>
+        </div>
         <SizeChartTable />
       </section>
 
@@ -77,32 +83,32 @@ export default function SizeAndFit() {
         <div className="split-pad" style={{gap: 22}}>
           <span className="eyebrow-sm">Which size</span>
           <h2 className="h2" style={{fontSize: 'clamp(24px, 2.8vw, 34px)'}}>
-            True to size for the full relaxed look. Down one for closer.
+            Measure something you already wear.
           </h2>
           <p className="body-copy">
-            The crewneck is cut wide through the body with a dropped shoulder —
-            the one intentionally oversized piece in a range that otherwise sits
-            lean. Taking your usual size gives you the boxy look in the photos.
-            Sizing down keeps the drop shoulder but reads closer to regular fit.
+            It is the one method that works every time. Find the garment in your
+            wardrobe that fits the way you want this one to, lay it flat, and
+            compare the half-chest. Two minutes with a tape measure beats any
+            amount of guessing from a body size.
           </p>
           <p className="body-copy">
-            Pairing it into a duo or kit? The bottoms are true to size — size the
-            crewneck for the look you want, not to match.
+            Between two sizes, that half-chest number decides it — larger for
+            room, smaller for a closer line. Where a particular cut runs
+            generous or lean, its own product page says so.
           </p>
           <p className="body-copy">
-            Between two sizes? The half-chest column decides it. Take the larger
-            for the full boxy look, the smaller for something closer to regular
-            fit — and check both against a sweatshirt you already wear.
+            Building a duo or a kit? Size each piece for how you want that piece
+            to sit. Nothing needs to match but the colour.
           </p>
 
           <div className="row-actions" style={{gap: '12px 18px', marginTop: 4}}>
             <Link
               className="btn btn-solid"
-              to={`/products/${HERO_PIECE.handle}`}
+              to="/shop"
               prefetch="intent"
               style={{minHeight: 52, padding: '0 26px'}}
             >
-              Shop the Crewneck
+              Shop the range
             </Link>
             <Link className="link-quiet" to="/shipping-and-faq" prefetch="intent">
               Shipping &amp; returns

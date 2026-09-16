@@ -13,7 +13,7 @@ export function SizeChartTable({rows = SIZE_CHART}: {rows?: SizeRow[]}) {
     <div className="chart">
       <table>
         <caption className="sr-only">
-          Oversized crewneck measurements, taken flat
+          Measurements, taken flat
         </caption>
         <thead>
           <tr>
@@ -54,7 +54,7 @@ export function SizeChartPreview() {
     <div className="chart chart-compact">
       <table>
         <caption className="sr-only">
-          Crewneck measurements for the four middle sizes
+          Measurements for the four middle sizes
         </caption>
         <thead>
           <tr>
@@ -88,10 +88,9 @@ export function SizeChartPanel() {
     <div className="modal-body">
       <SizeChartTable />
       <p style={{margin: '16px 0 0', fontSize: 15.5, lineHeight: 1.6}}>
-        <strong style={{fontWeight: 500}}>Runs oversized.</strong> True to size
-        for the full relaxed look, one down for a closer fit. The half-chest
-        column is the one to check — compare it against a sweatshirt you
-        already own and like the fit of.
+        The half-chest column is the one to check: compare it against a
+        garment you already own and like the fit of. Between two sizes, that
+        number decides it.
       </p>
       <p className="chart-foot" style={{padding: '10px 0 0'}}>
         {SIZE_CHART_FOOTNOTE}

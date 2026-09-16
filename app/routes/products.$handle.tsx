@@ -20,6 +20,7 @@ import {DEFAULT_HUE, findHue} from '~/data/hues';
 import {
   COMPANION_KEYS,
   getPiece,
+  hasSizeChart,
   ORDER_TERMS,
   PRODUCT_TABS,
 } from '~/data/range';
@@ -153,6 +154,7 @@ export default function Product() {
             productOptions={productOptions}
             selectedVariant={selectedVariant}
             companions={companions}
+            showSizeGuide={hasSizeChart(product.handle)}
           />
 
           <div className="terms">
@@ -166,15 +168,19 @@ export default function Product() {
             ))}
           </div>
 
-          <Accordion items={PRODUCT_TABS} defaultOpen="details" />
-
+          {/*
+            Shopify's description carries everything specific to this product —
+            its blank, fabric and cut. It leads; the shared tabs below it are
+            only the things true of every piece.
+          */}
           {product.descriptionHtml ? (
             <div
-              className="accordion-panel"
-              style={{padding: 0}}
+              className="product-description"
               dangerouslySetInnerHTML={{__html: product.descriptionHtml}}
             />
           ) : null}
+
+          <Accordion items={PRODUCT_TABS} />
         </div>
       </section>
 

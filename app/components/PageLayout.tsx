@@ -42,7 +42,7 @@ export function PageLayout({
         </Suspense>
       </Aside>
 
-      <Aside type="size" heading="Size chart · oversized crewneck" variant="modal">
+      <Aside type="size" heading="Size chart" variant="modal">
         <SizeChartPanel />
       </Aside>
     </Aside.Provider>

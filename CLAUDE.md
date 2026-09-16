@@ -204,6 +204,19 @@ the standing editorial copy — things that outlive any one product listing and 
 edited as copy, not as merchandising. Don't move commerce data into `app/data`,
 and don't put brand copy behind a metafield just because it can be.
 
+**Anything true of one product only belongs to Shopify.** `PRODUCT_TABS` renders
+on *every* PDP, so it holds only what is true of the whole range — care,
+shipping, returns. A product's blank, fabric and cut come from its Shopify
+description, which the PDP renders above those tabs. This split exists because
+it was once broken: crewneck fit notes and an AS Colour fleece spec were showing
+on the tee. Same rule for the size chart: `SIZE_CHART` is the crewneck's, and
+`hasSizeChart()` gates the size-guide link so no product ever shows another's
+measurements.
+
+**The site is not about one product.** The range is five pieces. Home, About,
+Shop and the size guide talk about the range; fit characteristics like "runs
+oversized" live on the product page that they are true of, and nowhere else.
+
 ## Routes
 
 | Path | Page |
