@@ -1,6 +1,7 @@
 import {Link} from 'react-router';
 import {HERO_PIECE} from '~/data/range';
 import {CONTACT_EMAIL} from '~/lib/seo';
+import {Logo} from '~/components/Logo';
 
 const YEAR = new Date().getFullYear();
 
@@ -9,6 +10,7 @@ export function Footer() {
     <footer className="site-footer">
       <div className="footer-cols">
         <div className="footer-col">
+          <Logo className="footer-logo" />
           <span className="footer-wordmark">Uniform-ish</span>
           <p className="footer-blurb">
             One hue, head to toe. Six matched earth tones, made to order,

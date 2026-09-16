@@ -1469,6 +1469,15 @@ a:hover {
   color: rgba(246, 244, 239, 0.72);
 }
 
+/* The mark runs the width of its column, like a rule with the name under it. */
+.footer-logo {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  margin-bottom: 4px;
+  color: var(--ink-inverse);
+}
+
 .footer-wordmark {
   font-size: 20px;
   letter-spacing: -0.03em;
