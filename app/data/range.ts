@@ -216,7 +216,7 @@ export const PRODUCT_TABS: ProductTab[] = [
   {
     key: 'ship',
     label: 'Shipping & production',
-    body: 'Made to order: nothing exists until you buy it. Production takes 2–5 business days, then 3–7 business days in transit — roughly 7–12 business days door to door. Pieces in one order may ship separately. Shipping is a flat rate by destination and is calculated at checkout.',
+    body: 'Made to order: nothing exists until you buy it. Production takes 2–5 business days, then 3–6 business days in transit within the EU and 7–15 further afield. Pieces in one order may ship separately. Shipping is a flat rate by destination and is calculated at checkout.',
   },
 ];
 
@@ -233,7 +233,7 @@ export const FAQS: Faq[] = [
   },
   {
     q: 'Why does it take two weeks?',
-    a: 'Nothing here is made until you order it. Rather than guess a season of sizes and colours into a warehouse, we’ve built the whole operation around made-to-order production: each piece is finished once your order lands. That’s 2–5 business days to make, then 3–7 in transit. The pipeline is genuinely new and we’re still tuning it, so expect those windows to tighten as we go. What the wait buys is no overproduction, no dead stock and no end-of-season clearance pile.',
+    a: 'Nothing here is made until you order it. Rather than guess a season of sizes and colours into a warehouse, we’ve built the whole operation around made-to-order production: each piece is finished once your order lands. That’s 2–5 business days to make, then 3–6 in transit inside the EU and longer further out. The pipeline is genuinely new and we’re still tuning it, so expect those windows to tighten as we go. What the wait buys is no overproduction, no dead stock and no end-of-season clearance pile.',
   },
   {
     q: 'What currency will I be charged in?',
@@ -256,15 +256,20 @@ export const FAQS: Faq[] = [
 export type ShippingWindow = {region: string; window: string; rate: string};
 
 /**
- * Transit windows and the flat rates configured on the store's default delivery
- * profile. Rates are quoted in EUR, the store's base currency, and converted at
- * checkout like everything else.
+ * Transit windows come from the store's published Shipping policy; rates come
+ * from the default delivery profile's zones. Keep both in step with Shopify —
+ * the published policy is the authoritative version, and a mismatch between it
+ * and this table is a consumer-law problem, not a copy inconsistency.
+ *
+ * Rates are quoted in EUR, the store's base currency, and converted at checkout
+ * like everything else.
  */
 export const SHIPPING_WINDOWS: ShippingWindow[] = [
   {region: 'Production', window: '2–5 business days', rate: '—'},
-  {region: 'Spain', window: '2–4 business days', rate: '€6.99'},
-  {region: 'European Union', window: '4–8 business days', rate: '€8.99'},
-  {region: 'Rest of world', window: '6–14 business days', rate: '€12.99'},
+  {region: 'Spain', window: '3–6 business days', rate: '€6.99'},
+  {region: 'European Union', window: '3–6 business days', rate: '€8.99'},
+  {region: 'United Kingdom', window: '4–7 business days', rate: '€12.99'},
+  {region: 'Rest of world', window: '7–15 business days', rate: '€12.99'},
 ];
 
 export const SHIPPING_NOTE =
@@ -277,8 +282,8 @@ export const SHIPPING_NOTE =
 export const ORDER_TERMS = [
   {
     title: 'Made to order:',
-    body: '2–5 business days to make, 3–7 days to ship. Tracking lands when it leaves the facility.',
-    short: 'Made to order: 2–5 days to make, 3–7 to ship.',
+    body: '2–5 business days to make, then 3–6 days to ship inside the EU and up to 15 further afield. Tracking lands when it leaves the facility.',
+    short: 'Made to order: 2–5 days to make, then 3–15 to ship.',
   },
   {
     title: 'Kits return within 30 days.',

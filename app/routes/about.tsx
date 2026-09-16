@@ -3,15 +3,15 @@ import {Link} from 'react-router';
 import type {Route} from './+types/about';
 import {HueBlock} from '~/components/HueBlock';
 import {HUES} from '~/data/hues';
+import {seoMeta} from '~/lib/seo';
 
-export const meta: Route.MetaFunction = () => [
-  {title: 'About — Uniform-ish'},
-  {
-    name: 'description',
-    content:
+export const meta: Route.MetaFunction = () =>
+  seoMeta({
+    title: 'About',
+    description:
       'One hue, head to toe. Why the colour system came before the clothes, and why every order is at least two pieces.',
-  },
-];
+    path: '/about',
+  });
 
 export default function About() {
   return (

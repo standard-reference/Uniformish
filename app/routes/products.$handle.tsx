@@ -15,6 +15,7 @@ import {ProductForm} from '~/components/ProductForm';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {COMPANION_PRODUCTS_QUERY, handleQuery} from '~/lib/queries';
 import {hueValue} from '~/lib/companions';
+import {seoMeta} from '~/lib/seo';
 import {DEFAULT_HUE, findHue} from '~/data/hues';
 import {
   COMPANION_KEYS,
@@ -24,18 +25,25 @@ import {
 } from '~/data/range';
 
 export const meta: Route.MetaFunction = ({data}) => {
-  const title = data?.product.title ?? 'Product';
-  return [
-    {title: `${title} — Uniform-ish`},
-    {
-      name: 'description',
-      content:
-        data?.product.seo?.description ??
-        data?.product.description?.slice(0, 160) ??
-        '',
-    },
-    {rel: 'canonical', href: `/products/${data?.product.handle}`},
-  ];
+  const product = data?.product;
+  if (!product) {
+    return seoMeta({
+      title: 'Product',
+      description: 'One hue, head to toe.',
+      path: '/',
+    });
+  }
+
+  return seoMeta({
+    title: product.seo?.title ?? product.title,
+    description:
+      product.seo?.description ?? product.description?.slice(0, 160) ?? '',
+    // Canonical is the bare product path: variant query params are the same
+    // page, and pointing every colourway at itself would split the ranking.
+    path: `/products/${product.handle}`,
+    image: product.selectedOrFirstAvailableVariant?.image?.url ?? undefined,
+    type: 'product',
+  });
 };
 
 export async function loader(args: Route.LoaderArgs) {

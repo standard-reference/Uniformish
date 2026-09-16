@@ -16,6 +16,7 @@ import favicon from '~/assets/favicon.svg';
 import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
 import {PageLayout} from '~/components/PageLayout';
+import {seoMeta} from '~/lib/seo';
 
 export type RootLoader = typeof loader;
 
@@ -44,14 +45,14 @@ export function links() {
   ];
 }
 
-export const meta: Route.MetaFunction = () => [
-  {title: 'Uniform-ish — One hue, head to toe'},
-  {
-    name: 'description',
-    content:
+// Default for any route that doesn't set its own; React Router merges per-route
+// meta over this.
+export const meta: Route.MetaFunction = () =>
+  seoMeta({
+    title: 'Uniform-ish — One hue, head to toe',
+    description:
       'Six earth tones matched to each other with real colour maths, made to order and shipped worldwide. Stay inside one hue family and the whole fit reads as monotone.',
-  },
-];
+  });
 
 export async function loader(args: Route.LoaderArgs) {
   const {storefront, env, customerAccount, cart} = args.context;

@@ -7,10 +7,15 @@ import {SizeChartPreview, SizeChartTrigger} from '~/components/SizeChart';
 import {DEFAULT_HUE, HUES} from '~/data/hues';
 import {HERO_PIECE, LIVE_HUES} from '~/data/range';
 import {HERO_PRODUCT_QUERY} from '~/lib/queries';
+import {seoMeta} from '~/lib/seo';
 
-export const meta: Route.MetaFunction = () => [
-  {title: 'Uniform-ish — One hue, head to toe'},
-];
+export const meta: Route.MetaFunction = () =>
+  seoMeta({
+    title: 'Uniform-ish — One hue, head to toe',
+    description:
+      'Six earth tones matched to each other with real colour maths, made to order and shipped worldwide. Starting with an oversized crewneck.',
+    path: '/',
+  });
 
 export async function loader({context}: Route.LoaderArgs) {
   // The hero price comes from Shopify when the product is listed; until then the
@@ -69,8 +74,8 @@ export default function Home() {
         <div className="fact">
           <span className="eyebrow-sm">01 / Production</span>
           <p>
-            Made in 2–5 business days, then 3–7 days in transit. Roughly two
-            weeks, honestly stated.
+            Made in 2–5 business days, then 3–6 in transit inside the EU.
+            Roughly two weeks, honestly stated.
           </p>
         </div>
         <div className="fact">

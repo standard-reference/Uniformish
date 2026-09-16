@@ -2,15 +2,15 @@ import {Link} from 'react-router';
 import type {Route} from './+types/size-and-fit';
 import {SizeChartTable} from '~/components/SizeChart';
 import {HERO_PIECE} from '~/data/range';
+import {seoMeta} from '~/lib/seo';
 
-export const meta: Route.MetaFunction = () => [
-  {title: 'Size & fit guide — Uniform-ish'},
-  {
-    name: 'description',
-    content:
+export const meta: Route.MetaFunction = () =>
+  seoMeta({
+    title: 'Size & fit guide',
+    description:
       'Garment-flat measurements for the oversized crewneck, in centimetres and inches, with how to measure and which size to take.',
-  },
-];
+    path: '/size-and-fit',
+  });
 
 export default function SizeAndFit() {
   return (

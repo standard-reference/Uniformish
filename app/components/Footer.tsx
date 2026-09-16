@@ -1,5 +1,6 @@
 import {Link} from 'react-router';
 import {HERO_PIECE} from '~/data/range';
+import {CONTACT_EMAIL} from '~/lib/seo';
 
 const YEAR = new Date().getFullYear();
 
@@ -39,7 +40,7 @@ export function Footer() {
           <Link to="/about" prefetch="intent">
             About
           </Link>
-          <a href="mailto:hello@uniformish.store">hello@uniformish.store</a>
+          <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
         </div>
 
         <div className="footer-col">

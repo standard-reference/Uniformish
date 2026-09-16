@@ -11,15 +11,15 @@ import {
   PIECES,
 } from '~/data/range';
 import {handleQuery, RANGE_PRICES_QUERY} from '~/lib/queries';
+import {seoMeta} from '~/lib/seo';
 
-export const meta: Route.MetaFunction = () => [
-  {title: 'Shop — Uniform-ish'},
-  {
-    name: 'description',
-    content:
+export const meta: Route.MetaFunction = () =>
+  seoMeta({
+    title: 'Shop',
+    description:
       'Start with a hue, not a garment. Six matched earth tones across the range, sold as duos and three-piece kits.',
-  },
-];
+    path: '/shop',
+  });
 
 export async function loader({context}: Route.LoaderArgs) {
   // Live prices for whichever pieces are actually listed. Anything missing

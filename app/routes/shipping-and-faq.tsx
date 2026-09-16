@@ -2,15 +2,15 @@ import {Link} from 'react-router';
 import type {Route} from './+types/shipping-and-faq';
 import {Accordion} from '~/components/Accordion';
 import {FAQS, SHIPPING_NOTE, SHIPPING_WINDOWS} from '~/data/range';
+import {seoMeta} from '~/lib/seo';
 
-export const meta: Route.MetaFunction = () => [
-  {title: 'Shipping, returns & FAQ — Uniform-ish'},
-  {
-    name: 'description',
-    content:
+export const meta: Route.MetaFunction = () =>
+  seoMeta({
+    title: 'Shipping, returns & FAQ',
+    description:
       'Production and transit windows, the returns policy on kits and duos, and answers to the questions that come up most.',
-  },
-];
+    path: '/shipping-and-faq',
+  });
 
 export default function ShippingAndFaq() {
   return (

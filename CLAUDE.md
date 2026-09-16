@@ -105,10 +105,19 @@ it.*
 delivery address. Four Printful delivery profiles carry per-product-type rates;
 the default profile is €6.99 Spain / €8.99 EU / €12.99 rest of world.
 
-**Returns:** kits return whole within 30 days. Duos are final sale (two
-separately-sold pieces, nothing to partially unwind). Faulty pieces are replaced
-or refunded in full, always. *There is no free size-remake policy* — it was
-deliberately removed; don't reintroduce it.
+**Returns — the site and the published policy currently disagree.** The site
+says kits return whole within 30 days, duos are final sale, and there is no free
+size-remake. The store's Shopify **Refund policy** says something different: a
+14-day EU/UK right of withdrawal on all standard-size items, *and* one free size
+exchange per order. The published policy is the legally operative document, so
+until one side is changed the site is the wrong one. See "Not done yet".
+
+Faulty pieces are replaced or refunded in full, always — both agree on that.
+
+**Shipping windows and rates come from Shopify**, not from a guess: windows from
+the published Shipping policy, rates from the default delivery profile's zones.
+If either changes in the admin, update `SHIPPING_WINDOWS` in `app/data/range.ts`
+to match. A mismatch there is a consumer-law problem, not a copy inconsistency.
 
 **No reviews anywhere on the site.** Also deliberate. No review module, no
 star ratings, no "be the first to review" placeholder.
@@ -125,7 +134,17 @@ This app is the browsing UI in front of it, talking to the **Storefront API** an
 handing off to Shopify's hosted checkout.
 
 **The store:** `smsg1t-j1.myshopify.com` (Uniformish, Basic plan, based in Sant
-Cugat del Vallès, Spain).
+Cugat del Vallès, Spain). Products are published to the **`Uniform-ish`**
+publication — the Hydrogen storefront channel — which is what the Storefront API
+reads.
+
+**The public domain is `uniformish.store`**, owned but **not yet attached to the
+store**: Shopify's `primaryDomain` is still the myshopify host. `SITE_URL` in
+`app/lib/seo.ts` is the single place the public domain is written down; canonical
+URLs and social cards always point there, so Oxygen previews and the myshopify
+fallback can't compete with production in search. `PUBLIC_STORE_DOMAIN` is a
+different thing and stays as the myshopify host — it addresses the API, not the
+site.
 
 ## Currency, and why nothing is hardcoded
 
@@ -233,6 +252,9 @@ against a real storefront.
 - **Placeholders are labelled.** Every colour block standing in for photography
   carries a caption naming the shot it's holding a place for. Keep that when
   adding new ones — an unlabelled placeholder ships as a bug.
+- **Shopify's published policies win.** Shipping windows, returns terms and tax
+  wording on the site must match the store's policy pages. When they disagree,
+  fix the site or change the policy — don't leave both live.
 - **Copy rules.** No reviews. No size-remake policy. Don't reintroduce
   apologetic "we're a new brand" framing — the one place newness is mentioned is
   the "why does it take two weeks" FAQ, where it explains the made-to-order
@@ -260,6 +282,21 @@ against a real storefront.
 - **Kits are not a real Shopify product yet.** The kit path in the PDP bundles
   three separate line items. A true bundled product (needed for the 30-day kit
   return to mean anything at checkout) is still to be modelled in Shopify.
+- **Returns policy conflict — needs a decision, and it is the riskiest open
+  item.** The Shopify Refund policy grants EU/UK customers a 14-day right of
+  withdrawal on all standard-size items and promises one free size exchange per
+  order. The site says duos are final sale and offers no remake. Made-to-order
+  does **not** by itself remove the EU withdrawal right — that exemption is for
+  goods personalised to the customer's specification, which a stock-size garment
+  in a stock colour is not. So "final sale" as written is probably not
+  enforceable against an EU consumer, and it contradicts the merchant's own
+  published terms. Either the site copy changes or the policy does; a lawyer
+  should decide which, not a session.
+- **The refund policy also still contains removed copy** — it opens "We're a new,
+  small operation" and describes the free size exchange, both of which were
+  deliberately cut from the site. Editing Shopify policy text is an admin task.
+- **`uniformish.store` is not attached to the store.** Domain is owned; Shopify
+  still reports the myshopify host as primary. For a headless build the domain
+  should point at the **Oxygen deployment** via the Hydrogen channel, not at the
+  Online Store theme.
 - **Trademark clearance** for "Uniform-ish" in Class 25.
-- **`hello@uniform-ish.com`** in the footer, and the Privacy/Terms links, assume
-  a domain and Shopify policy pages that don't exist yet.
