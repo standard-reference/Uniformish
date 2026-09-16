@@ -134,9 +134,9 @@ export default function About() {
             lightness, chroma and hue angle, so &ldquo;these go together&rdquo; is
             something we can check rather than something you have to take our word
             for — and a blank that misses the band doesn&rsquo;t ship, which is
-            the whole reason the range grows slowly. Kits come back whole within
-            30 days if the look isn&rsquo;t what you pictured, and faulty pieces
-            are replaced or refunded in full, always.
+            the whole reason the range grows slowly. And if a piece isn&rsquo;t
+            what you pictured it goes back on its own — keep what works, send
+            back what doesn&rsquo;t.
           </p>
           <Link className="link-rule" to="/shipping-and-faq" prefetch="intent">
             Read the policy in full

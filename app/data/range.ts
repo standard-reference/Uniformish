@@ -240,8 +240,8 @@ export const FAQS: Faq[] = [
     a: 'Yours, wherever we sell. Prices are set once and converted to your local currency automatically — the figure you see on the product page is the figure you pay, and checkout confirms it before you commit. Any duties or taxes for your destination are shown at checkout too, so there is nothing to work out afterwards.',
   },
   {
-    q: 'Can I return a duo?',
-    a: 'Duos are final sale. They’re two separately-sold pieces grouped at the cart rather than one bundled product, so there’s nothing to partially unwind if only one comes back. Kits are a single product and can be returned whole within 30 days. Since every piece is made to order we can’t resell a return, which is why the window sits on kits rather than on everything — the size guide is the thing to spend two minutes on before you order.',
+    q: 'Can I return part of an order?',
+    a: 'Yes — keep what works, send back what doesn’t. Every piece is sold and refunded individually, so a duo or a kit is never all-or-nothing. You have 14 days from delivery to change your mind in the EU and UK, 30 days elsewhere, and return postage is yours unless the piece arrived faulty or wrong. The size guide is still worth two minutes first: it is the cheapest return there is.',
   },
   {
     q: 'Where does it ship from?',
@@ -286,9 +286,9 @@ export const ORDER_TERMS = [
     short: 'Made to order: 2–5 days to make, then 3–15 to ship.',
   },
   {
-    title: 'Kits return within 30 days.',
-    body: 'Duos are two separately-sold pieces, so they’re final sale. Faulty or misprinted pieces are replaced or refunded in full, always.',
-    short: 'Kits return within 30 days; duos are final sale.',
+    title: 'Returns, per piece:',
+    body: '14 days to change your mind in the EU and UK, 30 days elsewhere — on any single piece, not the whole order. Return postage is yours; anything faulty or wrong is ours.',
+    short: 'Returns per piece — 14 days EU/UK, 30 elsewhere.',
   },
   {
     title: 'Secure checkout',

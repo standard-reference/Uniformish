@@ -56,48 +56,51 @@ export default function ShippingAndFaq() {
         </div>
 
         <div className="split-pad" style={{gap: 18}}>
-          <span className="eyebrow-sm">Returns &amp; exchanges</span>
-          <h2 className="h3">Kits return within 30 days</h2>
+          <span className="eyebrow-sm">Returns &amp; refunds</span>
+          <h2 className="h3">Keep what works, send back what doesn&rsquo;t</h2>
 
           <p className="body-copy" style={{fontSize: 16}}>
-            Every piece is made for you specifically, which means we can&rsquo;t
-            resell a return — so the return window sits on kits, where there is a
-            single bundled product to send back whole.
+            Every piece is sold and refunded individually, including pieces
+            bought together as a duo or a kit. You never have to return a whole
+            order to return one item.
           </p>
 
           <div className="steps">
             <div className="step">
               <span className="num">01</span>
               <p>
-                Email us within 30 days of delivery with your order number. Kits
-                come back whole, unworn and unwashed.
+                <strong>14 days in the EU and UK</strong> to change your mind, for
+                any reason. 30 days everywhere else. Email us within that window
+                with your order number and what&rsquo;s coming back.
               </p>
             </div>
             <div className="step">
               <span className="num">02</span>
               <p>
-                We confirm and send return instructions the same day, then refund
-                to the original payment method once the kit arrives.
+                We send the return address within two business days. Post it back
+                within 14 days of telling us — return postage is yours on a
+                change of mind.
               </p>
             </div>
             <div className="step">
               <span className="num">03</span>
               <p>
-                Faulty or misprinted pieces are replaced or refunded in full,
-                always — that one has no window on it.
+                Refunded to your original payment method within 14 days of the
+                parcel reaching us, or of proof of postage — whichever comes
+                first.
               </p>
             </div>
           </div>
 
           <div className="callout">
             <span className="eyebrow-sm" style={{letterSpacing: '0.12em'}}>
-              Kits vs duos
+              Faulty, damaged or wrong
             </span>
             <p>
-              <strong>Kits</strong> are one bundled product, so they can come back
-              whole within 30 days for a refund. <strong>Duos</strong> are two
-              separately-sold pieces — there&rsquo;s nothing to partially unwind,
-              so they&rsquo;re final sale.
+              Photograph it and email within 30 days. Replaced or refunded in
+              full, postage both ways on us — <strong>your choice, not ours</strong>.
+              A statutory guarantee against lack of conformity also applies for
+              three years under Spanish law, and nothing here limits it.
             </p>
             <Link className="link-rule" to="/size-and-fit" prefetch="intent">
               Check the size guide first

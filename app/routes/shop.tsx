@@ -115,10 +115,9 @@ export default function Shop() {
           <span className="eyebrow-sm">Kit · three pieces</span>
           <h2 className="h3">The whole look, one add-to-cart</h2>
           <p>
-            Three pieces in one hue, bundled and priced as a single product.
-            It&rsquo;s the cleanest version of the rule and the only path with a
-            30-day return attached — if a kit isn&rsquo;t right, send it back
-            whole.
+            Three pieces in one hue, picked together and added in one go.
+            It&rsquo;s the cleanest version of the rule — and each piece is still
+            refunded on its own, so a kit is never all-or-nothing.
           </p>
           <span className="price">From €{baseTotal(KIT_KEYS)}</span>
           <Link className="btn btn-solid" to={productPath} prefetch="intent">
@@ -131,8 +130,8 @@ export default function Shop() {
           <h2 className="h3">Two pieces, into what you already own</h2>
           <p>
             Pick two pieces in one hue — priced individually, grouped at the
-            cart. Meant to slot into your wardrobe rather than replace it. Final
-            sale, since they&rsquo;re sold as two separate pieces.
+            cart. Meant to slot into your wardrobe rather than replace it, and
+            returnable piece by piece if one of them misses.
           </p>
           <span className="price">From €{duoFrom}</span>
           <Link className="btn btn-outline" to={productPath} prefetch="intent">

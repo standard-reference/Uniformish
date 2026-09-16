@@ -105,14 +105,27 @@ it.*
 delivery address. Four Printful delivery profiles carry per-product-type rates;
 the default profile is €6.99 Spain / €8.99 EU / €12.99 rest of world.
 
-**Returns — the site and the published policy currently disagree.** The site
-says kits return whole within 30 days, duos are final sale, and there is no free
-size-remake. The store's Shopify **Refund policy** says something different: a
-14-day EU/UK right of withdrawal on all standard-size items, *and* one free size
-exchange per order. The published policy is the legally operative document, so
-until one side is changed the site is the wrong one. See "Not done yet".
+**Returns: keep what works, send back what doesn't.** Every piece is sold and
+refunded individually — a duo or a kit is never all-or-nothing. 14 days to
+withdraw in the EU and UK, 30 days elsewhere. Return postage is the customer's
+on a change of mind; faulty, damaged or wrong items are the merchant's, both
+ways. Faulty pieces are replaced or refunded in full regardless, and a
+three-year Spanish conformity guarantee sits underneath all of it.
 
-Faulty pieces are replaced or refunded in full, always — both agree on that.
+Two things here are load-bearing, not stylistic:
+
+- **"Final sale" was removed and must not come back.** The personalisation
+  exemption in Directive 2011/83/EU covers goods made to a customer's own
+  specification. A stock size in a stock colour is not that, so made-to-order
+  does not remove the withdrawal right.
+- **Return postage being the customer's cost is disclosed pre-purchase** via
+  `ORDER_TERMS`, which renders on the product page and in the cart. That
+  disclosure is what makes the term binding on an EU consumer — if those terms
+  move, the term has to stay visible before checkout.
+
+*There is no free size-remake policy* — deliberately removed; don't reintroduce
+it. The canonical policy text lives at `docs/policies/refund-policy.md`; Shopify
+admin is the live version and the two must be kept in step.
 
 **Shipping windows and rates come from Shopify**, not from a guess: windows from
 the published Shipping policy, rates from the default delivery profile's zones.
@@ -173,6 +186,7 @@ fall back to the primary market's EUR.
 ## Layout
 
 ```
+docs/policies/    canonical text of the Shopify policy pages, kept in sync by hand
 app/
   data/          brand content — the hue system and the range. Not commerce data.
     hues.ts      the six hues, their steps, and option-name matching
@@ -282,19 +296,20 @@ against a real storefront.
 - **Kits are not a real Shopify product yet.** The kit path in the PDP bundles
   three separate line items. A true bundled product (needed for the 30-day kit
   return to mean anything at checkout) is still to be modelled in Shopify.
-- **Returns policy conflict — needs a decision, and it is the riskiest open
-  item.** The Shopify Refund policy grants EU/UK customers a 14-day right of
-  withdrawal on all standard-size items and promises one free size exchange per
-  order. The site says duos are final sale and offers no remake. Made-to-order
-  does **not** by itself remove the EU withdrawal right — that exemption is for
-  goods personalised to the customer's specification, which a stock-size garment
-  in a stock colour is not. So "final sale" as written is probably not
-  enforceable against an EU consumer, and it contradicts the merchant's own
-  published terms. Either the site copy changes or the policy does; a lawyer
-  should decide which, not a session.
-- **The refund policy also still contains removed copy** — it opens "We're a new,
-  small operation" and describes the free size exchange, both of which were
-  deliberately cut from the site. Editing Shopify policy text is an admin task.
+- **Paste the new refund policy into Shopify.** `docs/policies/refund-policy.md`
+  is the agreed text and the site now matches it, but the *live* policy in
+  Shopify admin is still the old one — it says duos are final sale, promises a
+  free size exchange, and opens "We're a new, small operation". The Shopify MCP
+  connection lacks the `write_legal_policies` scope, so this is a human step:
+  Settings → Policies → Refund policy. Until it is done, the live legal text
+  contradicts the storefront.
+- **Have the policy read by a lawyer** before taking payments. It was drafted to
+  be defensible rather than merely tidy, but it states positions on EU
+  withdrawal rights and the Spanish conformity guarantee, and it is the document
+  a dispute would turn on.
+- **Terms of service needs two edits** to match reality: it says "Prices are
+  shown in EUR", which Markets makes untrue for most buyers, and it should point
+  at the refund policy rather than restating return terms.
 - **`uniformish.store` is not attached to the store.** Domain is owned; Shopify
   still reports the myshopify host as primary. For a headless build the domain
   should point at the **Oxygen deployment** via the Hydrogen channel, not at the

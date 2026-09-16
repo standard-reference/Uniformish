@@ -223,9 +223,9 @@ function PairingPanel({
     {
       key: 'duo',
       label: 'Duo · 2 pieces',
-      note: 'priced separately · final sale',
+      note: 'two pieces, one hue',
     },
-    {key: 'kit', label: 'Kit · 3 pieces', note: 'one product · 30-day return'},
+    {key: 'kit', label: 'Kit · 3 pieces', note: 'the full look'},
   ];
 
   return (
@@ -311,8 +311,8 @@ function PairingPanel({
             );
           })}
           <p className="note">
-            One add-to-cart, one colourway, and the only path with a 30-day
-            return attached.
+            One add-to-cart, one colourway. Each piece is still refunded on its
+            own if one of them isn&rsquo;t right.
           </p>
         </div>
       )}
