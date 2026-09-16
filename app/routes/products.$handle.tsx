@@ -1,4 +1,4 @@
-import {useLoaderData} from 'react-router';
+import {Link, useLoaderData} from 'react-router';
 import {
   getSelectedProductOptions,
   Analytics,
@@ -14,7 +14,7 @@ import {HueBlock} from '~/components/HueBlock';
 import {ProductGallery} from '~/components/ProductGallery';
 import {ProductForm} from '~/components/ProductForm';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
-import {COMPANION_PRODUCTS_QUERY, handleQuery} from '~/lib/queries';
+import {COMPANION_PRODUCTS_QUERY} from '~/lib/queries';
 import {hueValue} from '~/lib/companions';
 import {seoMeta} from '~/lib/seo';
 import {DEFAULT_HUE, findHue} from '~/data/hues';
@@ -62,19 +62,20 @@ async function loadCriticalData({context, params, request}: Route.LoaderArgs) {
     throw new Error('Expected product handle to be defined');
   }
 
-  const companionHandles = COMPANION_KEYS.map(
-    (key) => getPiece(key)?.handle,
-  ).filter((value): value is string => Boolean(value));
-
   const [{product}, companionResult] = await Promise.all([
     storefront.query(PRODUCT_QUERY, {
       variables: {handle, selectedOptions: getSelectedProductOptions(request)},
     }),
-    // Pieces that pair with this one. A companion that isn't listed yet simply
-    // doesn't come back, and the pairing UI hides itself accordingly.
+    // Pieces that pair with this one, looked up by exact handle. A companion
+    // that isn't listed yet comes back null and the pairing UI hides itself.
     storefront
       .query(COMPANION_PRODUCTS_QUERY, {
-        variables: {query: handleQuery(companionHandles)},
+        variables: {
+          tee: getPiece('tee')?.handle ?? '',
+          sweatpant: getPiece('sweatpant')?.handle ?? '',
+          short: getPiece('short')?.handle ?? '',
+          sock: getPiece('sock')?.handle ?? '',
+        },
         cache: storefront.CacheShort(),
       })
       .catch(() => null),
@@ -86,16 +87,14 @@ async function loadCriticalData({context, params, request}: Route.LoaderArgs) {
 
   redirectIfHandleIsLocalized(request, {handle, data: product});
 
-  // Keep only pieces that are actually in the range. The Storefront `query`
-  // filter is a search, not an exact match — a backend that ignores or loosely
-  // interprets it would otherwise surface unrelated products as companions.
-  const companions = (companionResult?.products?.nodes ?? [])
-    .filter((candidate) => candidate.handle !== handle)
-    .filter((candidate) => companionHandles.includes(candidate.handle))
-    .sort(
-      (a, b) =>
-        companionHandles.indexOf(a.handle) - companionHandles.indexOf(b.handle),
-    );
+  // In the range's own order, dropping anything unlisted and this product
+  // itself (a piece never pairs with itself).
+  const companions = COMPANION_KEYS.map(
+    (key) => companionResult?.[key],
+  ).filter(
+    (candidate): candidate is NonNullable<typeof candidate> =>
+      Boolean(candidate) && candidate!.handle !== handle,
+  );
 
   return {product, companions};
 }
@@ -189,7 +188,12 @@ export default function Product() {
           </div>
           <div className="companion-grid">
             {companions.map((companion) => (
-              <div className="companion-card" key={companion.handle}>
+              <Link
+                className="companion-card"
+                key={companion.handle}
+                to={`/products/${companion.handle}`}
+                prefetch="intent"
+              >
                 <HueBlock
                   hue={hue}
                   image={companion.featuredImage ?? undefined}
@@ -199,9 +203,9 @@ export default function Product() {
                   <span>
                     <Money data={companion.priceRange.minVariantPrice} />
                   </span>
-                  <span>Add to duo</span>
+                  <span>View piece</span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </section>

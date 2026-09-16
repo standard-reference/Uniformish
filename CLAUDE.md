@@ -223,7 +223,7 @@ oversized" live on the product page that they are true of, and nowhere else.
 |---|---|
 | `/` | Home |
 | `/products/:handle` | PDP — hue + size selection, duo/kit pairing |
-| `/shop` | Shop — hue grid, kits & duos, the range table |
+| `/shop` | Shop — hue grid, kits & duos, and the product grid that reaches every piece |
 | `/about` | About |
 | `/size-and-fit` | Size & fit guide |
 | `/shipping-and-faq` | Shipping, returns & FAQ |
@@ -267,8 +267,15 @@ plain add-to-cart, and the two-piece rule is still enforced at the cart. Nothing
 in the UI invents a variant that doesn't exist: if a companion isn't made in the
 selected hue, the option is disabled and says so.
 
-`handleQuery()` builds a Storefront **search** filter, not an exact match, so
-both the PDP and `/shop` re-filter the results against known handles. Keep that.
+**Never filter a Storefront product query by `handle:`.** The `query` argument
+supports `available_for_sale`, `created_at`, `product_type`, `tag`, `tag_not`,
+`title`, `updated_at`, `variants.price` and `vendor` — and nothing else.
+`handle:` is Admin API syntax; the Storefront API doesn't reject it, it degrades
+to a free-text search that matches nothing. That shipped: the Shop page listed
+the entire range as unavailable and the pairing panel never found a companion,
+with no error anywhere. Look pieces up by exact handle with aliased
+`product(handle:)` calls, or list products and filter locally — see
+`app/lib/queries.ts`.
 
 `matchCompanionVariant()` keeps three outcomes distinct, and the UI has to say
 which one happened: **not made in this hue** (a refusal — never substitute a

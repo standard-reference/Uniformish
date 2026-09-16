@@ -4,7 +4,7 @@ import type {Route} from './+types/shop';
 import {HueBlock} from '~/components/HueBlock';
 import {DEFAULT_HUE, HUES} from '~/data/hues';
 import {baseTotal, HERO_PIECE, KIT_KEYS, PIECES} from '~/data/range';
-import {handleQuery, RANGE_PRICES_QUERY} from '~/lib/queries';
+import {RANGE_PRODUCTS_QUERY} from '~/lib/queries';
 import {seoMeta} from '~/lib/seo';
 
 export const meta: Route.MetaFunction = () =>
@@ -16,31 +16,32 @@ export const meta: Route.MetaFunction = () =>
   });
 
 export async function loader({context}: Route.LoaderArgs) {
-  // Live prices for whichever pieces are actually listed. Anything missing
-  // falls back to the indicative figure and is labelled as such.
+  // Everything in the storefront, narrowed locally to the range's handles.
+  // Handle is not a filterable field on the Storefront API — see lib/queries.
   const listed = await context.storefront
-    .query(RANGE_PRICES_QUERY, {
-      variables: {query: handleQuery(PIECES.map((piece) => piece.handle))},
-      cache: context.storefront.CacheShort(),
-    })
+    .query(RANGE_PRODUCTS_QUERY, {cache: context.storefront.CacheShort()})
     .then((result) =>
-      // Same reason as the PDP: the Storefront `query` filter is a search, so
-      // narrow to the exact handles the range defines.
       result.products.nodes.filter((product) =>
         PIECES.some((piece) => piece.handle === product.handle),
       ),
     )
     .catch(() => []);
 
-  return {listed};
+  // In the range's own order, so the grid reads the way the line is designed
+  // rather than however Shopify happened to return it.
+  const products = PIECES.map((piece) =>
+    listed.find((product) => product.handle === piece.handle),
+  ).filter((product): product is (typeof listed)[number] => Boolean(product));
+
+  return {products};
 }
 
 export default function Shop() {
-  const {listed} = useLoaderData<typeof loader>();
+  const {products} = useLoaderData<typeof loader>();
   const productPath = `/products/${HERO_PIECE.handle}`;
 
   const priceFor = (handle: string) =>
-    listed.find((product) => product.handle === handle)?.priceRange
+    products.find((product) => product.handle === handle)?.priceRange
       .minVariantPrice;
 
   // A duo is the crewneck plus the cheapest piece it pairs with.
@@ -125,39 +126,55 @@ export default function Shop() {
           </span>
         </div>
 
-        <div className="range-list">
+        <div className="range-grid">
           {PIECES.map((piece) => {
-            const live = priceFor(piece.handle);
+            const live = products.find(
+              (product) => product.handle === piece.handle,
+            );
+
+            // A piece with no listing yet is shown but not linked — the range
+            // is the range, whether or not every piece is buyable today.
+            if (!live) {
+              return (
+                <div className="range-card is-upcoming" key={piece.key}>
+                  <HueBlock hue={DEFAULT_HUE} caption="Coming soon" />
+                  <p className="hue-card-name">{piece.name}</p>
+                  <div className="range-card-foot">
+                    <span>{piece.fit}</span>
+                    <span>Coming soon</span>
+                  </div>
+                </div>
+              );
+            }
+
             return (
-              <div className="range-row" key={piece.key}>
-                <span
-                  className="thumb"
-                  style={{background: DEFAULT_HUE.hex}}
-                  aria-hidden="true"
+              <Link
+                className="range-card"
+                key={piece.key}
+                to={`/products/${piece.handle}`}
+                prefetch="intent"
+              >
+                <HueBlock
+                  hue={DEFAULT_HUE}
+                  image={live.featuredImage ?? undefined}
+                  caption={live.featuredImage ? undefined : 'Photography to come'}
                 />
-                <span className="name">
-                  {live ? (
-                    <Link to={`/products/${piece.handle}`} prefetch="intent">
-                      {piece.name}
-                    </Link>
-                  ) : (
-                    piece.name
-                  )}
-                </span>
-                <span className="fit">{piece.fit}</span>
-                <span className="price">
-                  {live ? <Money data={live} /> : `from €${piece.basePrice}`}
-                </span>
-                <span className="status">{live ? 'Available' : 'Coming soon'}</span>
-              </div>
+                <p className="hue-card-name">{live.title}</p>
+                <div className="range-card-foot">
+                  <span>{piece.fit}</span>
+                  <span>
+                    <Money data={live.priceRange.minVariantPrice} />
+                  </span>
+                </div>
+              </Link>
             );
           })}
         </div>
 
-        <p className="lede" style={{margin: '20px 0 0', maxWidth: '56ch', fontSize: 15}}>
-          Slip-ons and socks round out the hue system and land next. Patterns —
-          the same six hues printed together — arrive as single accent pieces,
-          not a separate line.
+        <p className="lede" style={{margin: '24px 0 0', maxWidth: '56ch', fontSize: 15}}>
+          Slip-ons round out the hue system and land next. Patterns — the same
+          six hues printed together — arrive as single accent pieces, not a
+          separate line.
         </p>
       </section>
     </main>
