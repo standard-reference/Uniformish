@@ -249,6 +249,15 @@ selected hue, the option is disabled and says so.
 `handleQuery()` builds a Storefront **search** filter, not an exact match, so
 both the PDP and `/shop` re-filter the results against known handles. Keep that.
 
+`matchCompanionVariant()` keeps three outcomes distinct, and the UI has to say
+which one happened: **not made in this hue** (a refusal — never substitute a
+near-miss, that is the thing the colour system exists to prevent), **made in
+this hue but on a different size scale** (not a refusal — socks are S/M and
+L/XL while garments are S–3XL, so an exact size match misses), and **sold out**.
+Collapsing the middle case into the first is exactly the bug
+`app/lib/companions.test.ts` exists to catch: it told customers a colour was
+unavailable when only the sizing differed, and blocked a valid pairing.
+
 ## Commands
 
 ```
@@ -259,7 +268,13 @@ npm run preview     # build, then serve the built app
 npm run typecheck   # react-router typegen && tsc --noEmit
 npm run codegen     # regenerate storefrontapi.generated.d.ts
 npm run lint
+npm test            # node:test, no network, no extra dependencies
 ```
+
+Tests run the app's TypeScript directly — Node 22 strips types itself. `test/`
+holds a resolution hook so a test can import `~/lib/thing` the same way app code
+does; without it Node would demand file extensions and know nothing about the
+`~` alias. Put tests next to what they cover as `*.test.ts`.
 
 `npm run dev` works with no Shopify credentials — Hydrogen falls back to
 **mock.shop**, whose products are generic samples (sweatpants, slides) rather

@@ -14,7 +14,12 @@ import {useAside} from '~/components/Aside';
 import {SizeChartTrigger} from '~/components/SizeChart';
 import {findHue, isHueOption} from '~/data/hues';
 import {KIT_KEYS, MIN_PIECES_PER_ORDER, pieceByHandle} from '~/data/range';
-import {hueValue, matchCompanionVariant, optionValue} from '~/lib/companions';
+import {
+  type CompanionMatch,
+  hueValue,
+  matchCompanionVariant,
+  optionValue,
+} from '~/lib/companions';
 
 type SelectedVariant = ProductFragment['selectedOrFirstAvailableVariant'];
 type Path = 'duo' | 'kit';
@@ -264,7 +269,7 @@ function PairingPanel({
             Choose the second piece
           </span>
           {companions.map((product) => {
-            const variant = matchCompanionVariant(product, {colour, size});
+            const match = matchCompanionVariant(product, {colour, size});
             const hue = findHue(colour);
             return (
               <button
@@ -272,7 +277,7 @@ function PairingPanel({
                 key={product.handle}
                 type="button"
                 aria-pressed={pairHandle === product.handle}
-                disabled={!variant}
+                disabled={!match.variant}
                 onClick={() => setPairHandle(product.handle)}
               >
                 <span
@@ -281,11 +286,7 @@ function PairingPanel({
                 />
                 <span className="name">{product.title}</span>
                 <span className="price">
-                  {variant ? (
-                    <Money data={variant.price} />
-                  ) : (
-                    `Not in ${colour ?? 'this hue'}`
-                  )}
+                  <CompanionAvailability match={match} colour={colour} />
                 </span>
               </button>
             );
@@ -297,7 +298,7 @@ function PairingPanel({
             In this kit
           </span>
           {kitCompanions.map((product) => {
-            const variant = matchCompanionVariant(product, {colour, size});
+            const match = matchCompanionVariant(product, {colour, size});
             const hue = findHue(colour);
             return (
               <div className="kit-piece" key={product.handle}>
@@ -307,7 +308,7 @@ function PairingPanel({
                 />
                 <span className="name">{product.title}</span>
                 <span className="price">
-                  {variant ? <Money data={variant.price} /> : '—'}
+                  <CompanionAvailability match={match} colour={colour} />
                 </span>
               </div>
             );
@@ -356,37 +357,67 @@ function AddToCart({
         ? companions.filter((product) => product.handle === pairHandle)
         : [];
 
-  const companionVariants = pieces.map((product) =>
+  const matches = pieces.map((product) =>
     matchCompanionVariant(product, {colour, size}),
   );
-  const missingCompanion = companionVariants.some((variant) => !variant);
+  const missingHue = matches.some((match) => match.missingHue);
+  const unavailable = matches.some((match) => !match.variant);
 
   const lines = [
     {merchandiseId: selectedVariant.id, quantity: 1, selectedVariant},
-    ...companionVariants
-      .filter((variant): variant is NonNullable<typeof variant> => Boolean(variant))
+    ...matches
+      .map((match) => match.variant)
+      .filter((variant): variant is NonNullable<typeof variant> =>
+        Boolean(variant),
+      )
       .map((variant) => ({merchandiseId: variant.id, quantity: 1})),
   ];
 
   const soldOut = !selectedVariant.availableForSale;
   const label = soldOut
     ? 'Sold out'
-    : missingCompanion
+    : missingHue
       ? `Not made in ${colour ?? 'this hue'} yet`
-      : path === 'kit'
-        ? 'Add kit to cart'
-        : path === 'duo'
-          ? 'Add duo to cart'
-          : 'Add to cart';
+      : unavailable
+        ? 'Sold out in this combination'
+        : path === 'kit'
+          ? 'Add kit to cart'
+          : path === 'duo'
+            ? 'Add duo to cart'
+            : 'Add to cart';
 
   return (
     <AddToCartButton
-      disabled={soldOut || missingCompanion}
+      disabled={soldOut || unavailable}
       onClick={onAdded}
       lines={lines}
     >
       {label}
     </AddToCartButton>
+  );
+}
+
+/**
+ * What a companion's price slot says. A hue that isn't made says so; a
+ * different size scale shows the size being added instead, because that is a
+ * real, buyable pairing rather than a refusal.
+ */
+function CompanionAvailability({
+  match,
+  colour,
+}: {
+  match: CompanionMatch;
+  colour?: string;
+}) {
+  if (match.missingHue) return <>Not in {colour ?? 'this hue'}</>;
+  if (!match.variant) return <>Sold out</>;
+
+  const variantSize = optionValue(match.variant, 'Size');
+  return (
+    <>
+      <Money data={match.variant.price} />
+      {match.sizeDiffers && variantSize ? <> · {variantSize}</> : null}
+    </>
   );
 }
 
