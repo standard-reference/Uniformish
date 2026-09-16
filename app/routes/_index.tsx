@@ -62,7 +62,6 @@ export default function Home() {
         <HueBlock
           className="hero-art"
           hue={look}
-          frame
           caption={`Hero · ${look.name}, full look · on-body 4:5`}
         />
       </section>
@@ -118,7 +117,7 @@ export default function Home() {
               to={`${productPath}?Color=${encodeURIComponent(hue.name)}`}
               prefetch="intent"
             >
-              <HueBlock hue={hue} frame caption="Flat-lay" />
+              <HueBlock hue={hue} caption="Flat-lay" />
               <div className="hue-card-foot">
                 <span>{hue.name}</span>
                 <span className="hue-card-code">{hue.code}</span>

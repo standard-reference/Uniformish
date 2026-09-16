@@ -75,7 +75,7 @@ export default function Shop() {
               to={`${productPath}?Color=${encodeURIComponent(hue.name)}`}
               prefetch="intent"
             >
-              <HueBlock hue={hue} frame caption="Full look" />
+              <HueBlock hue={hue} caption="Full look" />
               <p className="hue-card-name">{hue.name}</p>
               <div className="hue-card-foot" style={{fontSize: 10.5, marginTop: 6}}>
                 <span className="hue-card-code">{hue.code}</span>

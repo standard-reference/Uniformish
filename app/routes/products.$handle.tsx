@@ -124,7 +124,6 @@ export default function Product() {
           <HueBlock
             className="pdp-media-main"
             hue={hue}
-            frame
             caption={`Flat-lay · ${hueLabel} · front`}
             image={selectedVariant?.image ?? undefined}
           />

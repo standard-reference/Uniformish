@@ -469,9 +469,9 @@ a:hover {
 /* ─────────── Colour blocks ─────────── */
 
 /*
- * A flat area of a hue, with the diagonal weave and an optional inset hairline.
- * Stands in for photography until real shots exist — every one carries a caption
- * naming the shot it is holding a place for.
+ * A flat area of a hue, with the diagonal weave over it. Stands in for
+ * photography until real shots exist — every one carries a caption naming the
+ * shot it is holding a place for.
  */
 .hue-block {
   position: relative;
@@ -499,13 +499,6 @@ a:hover {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.hue-block.has-frame::after {
-  content: '';
-  position: absolute;
-  inset: 16% 20%;
-  border: 1px solid var(--hue-hair, rgba(255, 255, 255, 0.16));
 }
 
 .hue-caption {
@@ -548,11 +541,7 @@ a:hover {
   padding: 12px;
 }
 
-.hue-card .hue-block.has-frame::after {
-  inset: 15% 19%;
-}
-
-.hue-card-foot {
+.hue-card .hue-card-foot {
   display: flex;
   align-items: baseline;
   justify-content: space-between;

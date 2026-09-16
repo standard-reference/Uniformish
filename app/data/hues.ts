@@ -114,8 +114,3 @@ export function findHue(name?: string | null): Hue | undefined {
 export function captionInk(hue: Hue): string {
   return hue.lightTone ? 'rgba(26,26,24,0.72)' : 'rgba(255,255,255,0.88)';
 }
-
-/** Hairline colour for the inset rule drawn over a hue. */
-export function hairline(hue: Hue): string {
-  return hue.lightTone ? 'rgba(26,26,24,0.16)' : 'rgba(255,255,255,0.16)';
-}

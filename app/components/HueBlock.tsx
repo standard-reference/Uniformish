@@ -1,10 +1,10 @@
 import type {CSSProperties, ReactNode} from 'react';
-import {captionInk, hairline, type Hue} from '~/data/hues';
+import {captionInk, type Hue} from '~/data/hues';
 
 /**
- * A flat area of a hue, carrying the diagonal weave and an optional inset
- * hairline. Used wherever photography will eventually go — the caption names
- * the shot it is standing in for, so no placeholder ships unlabelled.
+ * A flat area of a hue, carrying the diagonal weave. Used wherever photography
+ * will eventually go — the caption names the shot it is standing in for, so no
+ * placeholder ships unlabelled.
  *
  * Pass `image` once real photography exists and the colour becomes the
  * loading backdrop rather than the subject.
@@ -12,7 +12,6 @@ import {captionInk, hairline, type Hue} from '~/data/hues';
 export function HueBlock({
   hue,
   caption,
-  frame = false,
   className = '',
   style,
   image,
@@ -20,8 +19,6 @@ export function HueBlock({
 }: {
   hue: Hue;
   caption?: string;
-  /** Draw the inset hairline rectangle. */
-  frame?: boolean;
   className?: string;
   style?: CSSProperties;
   image?: {url: string; altText?: string | null};
@@ -29,12 +26,11 @@ export function HueBlock({
 }) {
   return (
     <div
-      className={`hue-block${frame ? ' has-frame' : ''}${className ? ` ${className}` : ''}`}
+      className={`hue-block${className ? ` ${className}` : ''}`}
       style={
         {
           '--hue': hue.hex,
           '--hue-ink': captionInk(hue),
-          '--hue-hair': hairline(hue),
           ...style,
         } as CSSProperties
       }
@@ -53,6 +49,5 @@ export function hueVars(hue: Hue): CSSProperties {
   return {
     '--hue': hue.hex,
     '--hue-ink': captionInk(hue),
-    '--hue-hair': hairline(hue),
   } as CSSProperties;
 }
