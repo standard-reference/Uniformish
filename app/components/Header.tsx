@@ -23,17 +23,13 @@ export const NAV = [
 export const ANNOUNCEMENT =
   'Made to order in six colour-matched hues — nothing sits in a warehouse';
 
-export function Header({
-  cart,
-  showAnnouncement,
-}: {
-  cart: Promise<CartApiQueryFragment | null>;
-  showAnnouncement: boolean;
-}) {
+export function Header({cart}: {cart: Promise<CartApiQueryFragment | null>}) {
   const {open} = useAside();
 
   return (
-    <header className={`site-header${showAnnouncement ? ' has-announcement' : ''}`}>
+    // Sticks to the very top. The announcement bar above it scrolls away
+    // rather than sticking, so no offset is needed here.
+    <header className="site-header">
       <NavLink className="wordmark" to="/" prefetch="intent" end>
         Uniform-ish
       </NavLink>

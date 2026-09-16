@@ -3,13 +3,7 @@ import {Money} from '@shopify/hydrogen';
 import type {Route} from './+types/shop';
 import {HueBlock} from '~/components/HueBlock';
 import {DEFAULT_HUE, HUES} from '~/data/hues';
-import {
-  baseTotal,
-  HERO_PIECE,
-  KIT_KEYS,
-  LIVE_HUES,
-  PIECES,
-} from '~/data/range';
+import {baseTotal, HERO_PIECE, KIT_KEYS, PIECES} from '~/data/range';
 import {handleQuery, RANGE_PRICES_QUERY} from '~/lib/queries';
 import {seoMeta} from '~/lib/seo';
 
@@ -74,39 +68,21 @@ export default function Shop() {
 
       <section style={{padding: '0 var(--gutter) clamp(36px, 4vw, 56px)'}}>
         <div className="hue-grid">
-          {HUES.map((hue) => {
-            const live = LIVE_HUES.includes(hue.name);
-            const body = (
-              <>
-                <HueBlock hue={hue} frame caption="Full look" />
-                <p className="hue-card-name">{hue.name}</p>
-                <div
-                  className="hue-card-foot"
-                  style={{fontSize: 10.5, marginTop: 6}}
-                >
-                  <span className="hue-card-code">{hue.code}</span>
-                  <span className="hue-card-code">
-                    {live ? 'Shop hue' : 'In production'}
-                  </span>
-                </div>
-              </>
-            );
-
-            return live ? (
-              <Link
-                className="hue-card"
-                key={hue.code}
-                to={`${productPath}?Color=${encodeURIComponent(hue.name)}`}
-                prefetch="intent"
-              >
-                {body}
-              </Link>
-            ) : (
-              <div className="hue-card is-upcoming" key={hue.code}>
-                {body}
+          {HUES.map((hue) => (
+            <Link
+              className="hue-card"
+              key={hue.code}
+              to={`${productPath}?Color=${encodeURIComponent(hue.name)}`}
+              prefetch="intent"
+            >
+              <HueBlock hue={hue} frame caption="Full look" />
+              <p className="hue-card-name">{hue.name}</p>
+              <div className="hue-card-foot" style={{fontSize: 10.5, marginTop: 6}}>
+                <span className="hue-card-code">{hue.code}</span>
+                <span className="hue-card-code">Shop hue</span>
               </div>
-            );
-          })}
+            </Link>
+          ))}
         </div>
       </section>
 

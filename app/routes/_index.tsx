@@ -5,7 +5,7 @@ import type {Route} from './+types/_index';
 import {HueBlock} from '~/components/HueBlock';
 import {SizeChartPreview, SizeChartTrigger} from '~/components/SizeChart';
 import {DEFAULT_HUE, HUES} from '~/data/hues';
-import {HERO_PIECE, LIVE_HUES} from '~/data/range';
+import {HERO_PIECE, PIECES} from '~/data/range';
 import {HERO_PRODUCT_QUERY} from '~/lib/queries';
 import {seoMeta} from '~/lib/seo';
 
@@ -48,16 +48,14 @@ export default function Home() {
             Stay inside a single hue family and the whole fit reads as monotone —
             whether every piece matches exactly or steps lighter toward the feet.
             Six earth tones, matched to each other with real colour maths, so
-            nothing in the range clashes with anything else in it. Starting with
-            an oversized crewneck.
+            nothing in the range clashes with anything else in it.
           </p>
           <div className="row-actions">
-            <Link className="btn btn-solid" to={productPath} prefetch="intent">
-              Shop the Crewneck
+            <Link className="btn btn-solid" to="/shop" prefetch="intent">
+              Shop the range
             </Link>
             <span className="meta" style={{letterSpacing: '0.06em'}}>
-              {price ? <Money data={price} /> : `from €${HERO_PIECE.basePrice}`} ·
-              S–3XL
+              {PIECES.length} pieces · XS–4XL
             </span>
           </div>
         </div>
@@ -114,41 +112,25 @@ export default function Home() {
         </div>
 
         <div className="hue-grid">
-          {HUES.map((hue) => {
-            const live = LIVE_HUES.includes(hue.name);
-            const foot = (
+          {HUES.map((hue) => (
+            <Link
+              className="hue-card"
+              key={hue.code}
+              to={`${productPath}?Color=${encodeURIComponent(hue.name)}`}
+              prefetch="intent"
+            >
+              <HueBlock hue={hue} frame caption="Flat-lay" />
               <div className="hue-card-foot">
                 <span>{hue.name}</span>
-                <span className="hue-card-code">
-                  {live ? hue.code : 'In production'}
-                </span>
+                <span className="hue-card-code">{hue.code}</span>
               </div>
-            );
-
-            // A hue the crewneck isn't made in yet is shown but not linked —
-            // the colour system is six, the catalogue is not yet.
-            return live ? (
-              <Link
-                className="hue-card"
-                key={hue.code}
-                to={`${productPath}?Color=${encodeURIComponent(hue.name)}`}
-                prefetch="intent"
-              >
-                <HueBlock hue={hue} frame caption="Flat-lay" />
-                {foot}
-              </Link>
-            ) : (
-              <div className="hue-card is-upcoming" key={hue.code}>
-                <HueBlock hue={hue} frame caption="Flat-lay" />
-                {foot}
-              </div>
-            );
-          })}
+            </Link>
+          ))}
         </div>
 
         <div style={{display: 'flex', justifyContent: 'center', marginTop: 'clamp(28px, 4vw, 48px)'}}>
-          <Link className="btn btn-solid" to={productPath} prefetch="intent">
-            Shop the Crewneck
+          <Link className="btn btn-solid" to="/shop" prefetch="intent">
+            Shop the range
           </Link>
         </div>
       </section>

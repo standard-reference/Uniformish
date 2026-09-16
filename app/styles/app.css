@@ -59,9 +59,6 @@
   --section-y: clamp(48px, 7vw, 108px);
   --section-y-sm: clamp(36px, 5vw, 80px);
 
-  /* Chrome heights, used to offset sticky elements */
-  --announcement-h: 46px;
-
   /* Diagonal weave drawn over every colour block */
   --weave: repeating-linear-gradient(
     135deg,
@@ -316,11 +313,6 @@ a:hover {
   border-bottom: 1px solid var(--rule);
 }
 
-/* When the announcement bar is showing, the header parks beneath it. */
-.site-header.has-announcement {
-  top: var(--announcement-h);
-}
-
 .wordmark {
   font-size: 19px;
   letter-spacing: -0.03em;
@@ -560,15 +552,6 @@ a:hover {
   inset: 15% 19%;
 }
 
-/* A hue that is designed but not yet made in a buyable blank. */
-.hue-card.is-upcoming {
-  cursor: default;
-}
-
-.hue-card.is-upcoming .hue-block {
-  opacity: 0.55;
-}
-
 .hue-card-foot {
   display: flex;
   align-items: baseline;
@@ -754,104 +737,81 @@ a:hover {
   font-size: 12px;
 }
 
-/* ─────────── Measuring schematic ─────────── */
+/* ─────────── Measurement diagram ─────────── */
 
-.schematic {
-  position: relative;
-  height: 230px;
+.diagram-frame {
+  margin: 6px 0 0;
+  padding: 18px 14px 12px;
   background: var(--panel);
   border: 1px solid var(--rule);
-  margin-top: 6px;
 }
 
-.schematic i {
-  position: absolute;
-  border: 1px solid var(--ink-faint);
-  background: var(--paper);
-}
-
-.schematic .body {
-  left: 50%;
-  top: 30px;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 150px;
-}
-
-.schematic .sleeve-l {
-  left: 50%;
-  top: 30px;
-  transform: translateX(-140px);
-  width: 84px;
-  height: 42px;
-}
-
-.schematic .sleeve-r {
-  left: 50%;
-  top: 30px;
-  transform: translateX(56px);
-  width: 84px;
-  height: 42px;
-}
-
-.schematic .rule-a {
-  left: 50%;
-  top: 84px;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 0;
-  border: 0;
-  border-top: 1px dashed var(--accent);
-  background: none;
-}
-
-.schematic .rule-b {
-  left: 50%;
-  top: 30px;
-  transform: translateX(78px);
-  width: 0;
-  height: 150px;
-  border: 0;
-  border-left: 1px dashed var(--accent);
-  background: none;
-}
-
-.schematic b {
-  position: absolute;
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-}
-
-.schematic .label-a {
-  left: 50%;
-  top: 88px;
-  transform: translateX(-50%);
-}
-
-.schematic .label-b {
-  left: 50%;
-  top: 100px;
-  transform: translateX(84px);
-}
-
-.schematic .label-c {
-  left: 50%;
-  top: 4px;
-  transform: translateX(-110px);
-}
-
-.schematic .caption {
-  position: absolute;
-  left: 14px;
-  bottom: 12px;
+.diagram-frame figcaption {
+  margin-top: 10px;
   font-family: var(--mono);
   font-size: 9.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-faint);
+}
+
+.measure-diagram {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* The garment itself: paper-filled, drawn in the faint ink. */
+.measure-diagram .garment path {
+  fill: var(--paper);
+  stroke: var(--ink-faint);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.measure-diagram .garment .rib {
+  fill: none;
+  stroke: var(--rule-strong);
+  stroke-width: 1.25;
+}
+
+/* Dimension lines sit on top, in the house accent, dashed so they read as
+   annotation rather than as part of the garment. */
+.measure-diagram .dim path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+}
+
+.measure-diagram .dim .tick {
+  stroke-dasharray: none;
+}
+
+.measure-diagram .dim .leader {
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+  opacity: 0.6;
+}
+
+.measure-diagram .dim .dot {
+  fill: var(--accent);
+  stroke: none;
+}
+
+/* Label chips, so A/B/C stay legible where they cross the garment. */
+.measure-diagram .label circle {
+  fill: var(--paper);
+  stroke: var(--accent);
+  stroke-width: 1.25;
+}
+
+.measure-diagram .label text {
+  fill: var(--accent);
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  text-anchor: middle;
 }
 
 .measure-steps {

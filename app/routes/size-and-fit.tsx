@@ -1,5 +1,6 @@
 import {Link} from 'react-router';
 import type {Route} from './+types/size-and-fit';
+import {MeasurementDiagram} from '~/components/MeasurementDiagram';
 import {SizeChartTable} from '~/components/SizeChart';
 import {HERO_PIECE} from '~/data/range';
 import {seoMeta} from '~/lib/seo';
@@ -67,19 +68,10 @@ export default function SizeAndFit() {
             </div>
           </div>
 
-          <div className="schematic" aria-hidden="true">
-            <i className="body" />
-            <i className="sleeve-l" />
-            <i className="sleeve-r" />
-            <i className="rule-a" />
-            <i className="rule-b" />
-            <b className="label-a">A</b>
-            <b className="label-b">B</b>
-            <b className="label-c">C</b>
-            <span className="caption">
-              Schematic — replace with measurement diagram
-            </span>
-          </div>
+          <figure className="diagram-frame">
+            <MeasurementDiagram />
+            <figcaption>Measured flat · not to scale</figcaption>
+          </figure>
         </div>
 
         <div className="split-pad" style={{gap: 22}}>

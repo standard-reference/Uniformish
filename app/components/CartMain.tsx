@@ -4,7 +4,7 @@ import type {CartApiQueryFragment} from 'storefrontapi.generated';
 import {useAside} from '~/components/Aside';
 import {CartLineItem} from '~/components/CartLineItem';
 import {CartSummary} from '~/components/CartSummary';
-import {HERO_PIECE, MIN_PIECES_PER_ORDER} from '~/data/range';
+import {MIN_PIECES_PER_ORDER} from '~/data/range';
 import {findHue, isHueOption} from '~/data/hues';
 
 export type CartLayout = 'page' | 'aside';
@@ -86,11 +86,11 @@ function CartEmpty() {
       <Link
         className="link-rule"
         style={{marginTop: 10}}
-        to={`/products/${HERO_PIECE.handle}`}
+        to="/shop"
         onClick={close}
         prefetch="viewport"
       >
-        Shop the Crewneck
+        Shop the range
       </Link>
     </div>
   );

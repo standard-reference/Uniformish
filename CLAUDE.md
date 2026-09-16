@@ -58,12 +58,12 @@ truth, not this table. Reproduced here for orientation only:
 | S-05 | Slate | `#5A6470` |
 | U-06 | Umber | `#5C4636` |
 
-**Only Jet, Moss and Slate are in production** (see `LIVE_HUES` in
-`app/data/range.ts`, derived from the crewneck's live colour option). The other
-three are designed but have no buyable blank yet, so the hue grids render them
-un-linked and marked "In production" rather than pointing at a variant that does
-not exist. When a hue goes live, its option value on the product is the only
-thing that needs to change.
+**Availability is Shopify's to decide, never the repo's.** All six hues render
+and link on the home and shop grids. Whether a hue can actually be bought is
+controlled by the product's variants in the admin — the PDP's swatches come from
+`getProductOptions`, so a variant that is disabled or missing renders as a
+disabled swatch on its own. Do not reintroduce a hardcoded list of "live" hues
+here; that is commerce state and it will drift.
 
 Design logic: all six sit on the same narrow band of lightness and chroma, held
 inside set OKLCh tolerances. That band is *why* any two read as chosen. **If a

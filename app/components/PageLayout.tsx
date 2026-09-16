@@ -23,7 +23,7 @@ export function PageLayout({
           <div className="announcement">{ANNOUNCEMENT}</div>
         ) : null}
 
-        <Header cart={cart} showAnnouncement={showAnnouncement} />
+        <Header cart={cart} />
 
         {children}
 

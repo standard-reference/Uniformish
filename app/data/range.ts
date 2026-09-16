@@ -21,8 +21,6 @@ export type Piece = {
   handle: string;
   /** Sizes the live product offers, for reference in the fit guide. */
   sizes: readonly string[];
-  /** Hues the live product is actually made in. Empty = no colour option. */
-  hues: readonly string[];
 };
 
 export const PIECES: Piece[] = [
@@ -34,7 +32,6 @@ export const PIECES: Piece[] = [
     listed: true,
     handle: 'uniform-ish-embroidered-crewneck-sweatshirt',
     sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
-    hues: ['Jet', 'Moss', 'Slate'],
   },
   {
     key: 'tee',
@@ -44,7 +41,6 @@ export const PIECES: Piece[] = [
     listed: true,
     handle: 'uniform-ish-embroidered-tee',
     sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
-    hues: [],
   },
   {
     key: 'sweatpant',
@@ -54,7 +50,6 @@ export const PIECES: Piece[] = [
     listed: true,
     handle: 'uniform-ish-embroidered-sweatpants',
     sizes: ['XS', 'S', 'M', 'L', 'XL', '2XL'],
-    hues: [],
   },
   {
     key: 'short',
@@ -64,7 +59,6 @@ export const PIECES: Piece[] = [
     listed: true,
     handle: 'uniform-ish-embroidered-shorts',
     sizes: ['S', 'M', 'L', 'XL', '2XL'],
-    hues: [],
   },
   {
     key: 'sock',
@@ -74,7 +68,6 @@ export const PIECES: Piece[] = [
     listed: true,
     handle: 'uniform-ish-embroidered-socks',
     sizes: ['S/M', 'L/XL'],
-    hues: ['Jet', 'Umber'],
   },
 ];
 
@@ -102,13 +95,6 @@ export function pieceByHandle(handle: string): Piece | undefined {
 export function baseTotal(keys: readonly string[]): number {
   return keys.reduce((sum, key) => sum + (getPiece(key)?.basePrice ?? 0), 0);
 }
-
-/**
- * Hues the crewneck is currently made in. The rest of the six are designed but
- * not yet in production, and the UI marks them as such rather than linking to a
- * variant that does not exist.
- */
-export const LIVE_HUES = HERO_PIECE.hues;
 
 export type SizeRow = {
   size: string;
