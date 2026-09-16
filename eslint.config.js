@@ -7,7 +7,6 @@ import globals from 'globals';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import _import from 'eslint-plugin-import';
 import tsParser from '@typescript-eslint/parser';
-import jest from 'eslint-plugin-jest';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import js from '@eslint/js';
@@ -222,20 +221,21 @@ export default [
       },
     },
   },
-  ...compat.extends('plugin:jest/recommended').map((config) => ({
-    ...config,
-    files: ['**/*.test.*'],
-  })),
   {
-    files: ['**/*.test.*'],
-    plugins: {
-      jest,
-    },
+    // Tests use node:test, not Jest. The skeleton wired eslint-plugin-jest to
+    // every *.test.* file; with Jest not installed, jest/no-deprecated-functions
+    // throws while trying to detect a Jest version and takes the whole lint run
+    // down with exit code 2 — no rule violation, just a crash.
+    files: ['**/*.test.{ts,tsx,js,jsx}', 'test/**/*.{js,mjs}'],
     languageOptions: {
       globals: {
         ...globals.node,
-        ...globals.jest,
       },
+    },
+    rules: {
+      // `test()` from node:test returns a promise the runner itself awaits;
+      // voiding or awaiting every call at the top level would be noise.
+      '@typescript-eslint/no-floating-promises': 'off',
     },
   },
   {
